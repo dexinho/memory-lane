@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="index.css">
-  <link rel="shortcut icon" href="./src/utility/favicon/favicon.png" type="image/x-icon">
+  <link rel="shortcut icon" href="./src/assets/favicon/favicon.png" type="image/x-icon">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -17,8 +17,16 @@
   <div id="container">
     <div id="social-media-login">
       <div id="social-media-main">
-        <div class="social-media-msg">Memory Lane</div>
-        <div class="social-media-msg">Connect with us and share your story.</div>
+        <div id="social-media-welcome">
+          <div class="social-media-msg">Memory Lane</div>
+          <div class="social-media-msg">Connect with us and share your story.</div>
+        </div>
+
+        <div id="example-pictures-div">
+          <img class="example-pictures" src="./src/assets/example_pictures/example1.jpg" alt="person-with-the-camera">
+          <img class="example-pictures" src="./src/assets/example_pictures/example2.jpg" alt="hands">
+          <img class="example-pictures" src="./src/assets/example_pictures/example3.jpg" alt="happy-person">
+        </div>
       </div>
       <div id="form-container">
         <form action="/login" method="post" id="login-form">
