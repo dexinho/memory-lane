@@ -1,0 +1,105 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Lato', sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+input {
+  border-radius: 1rem;
+}
+
+:root {
+  --primary-color: #BDC23D;
+  --secondary-color: #3DBDC2;
+  --tertiary-color: #C23DBD;
+}
+
+#bg-pic-r {
+  width: 100%;
+  height: 100%;
+  background-image: url('../../assets/example_pictures/example1.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: blur(4px);
+}
+
+#container-r {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#form-div-r {
+  width: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  border: 2px solid black;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.6)
+}
+
+form>* {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.form-inputs-r {
+  width: 100%;
+  padding: 1rem;
+  height: 3rem;
+  font-size: 1.2rem;
+}
+
+#registration-header-r {
+  justify-content: flex-start;
+  padding-bottom: 1rem;
+  font-size: 1.5rem;
+  color: var(--secondary-color)
+}
+
+#confirm-password-input-r::before {
+  content: '';
+  height: 1rem;
+  border: 2px solid red;
+}
+
+input[type='submit'] {
+  cursor: pointer;
+}
+
+#submit-btn-r {
+  width: 50%;
+  font-size: 1.5rem;
+  height: 2.5rem;
+  background-color: var(--secondary-color);
+  color: var(--tertiary-color);
+}

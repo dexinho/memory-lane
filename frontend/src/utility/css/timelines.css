@@ -1,0 +1,110 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Lato', sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+:root {
+  --primary-color: #BDC23D;
+  --secondary-color: #3DBDC2;
+  --tertiary-color: #C23DBD;
+}
+
+#container {
+  padding: 1rem;
+  padding-top: 0;
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  background-color: var(--primary-color);
+}
+
+#timelines-div-t {
+  min-width: 400px;
+  max-width: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+#timeline-user-profile-t {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: aqua;
+  border-top: 1rem solid var(--primary-color);
+}
+
+#timeline-user-profile-t > * {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+#sort-timelines-div-t {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.user-profile-pic-t {
+  width: 100px;
+  height: 100%;
+}
+
+.user-profile-pic-t>img {
+  width: 100%;
+}
+
+#timeline-slots-t {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.timeline-slot-t {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid black;
+}
+
+.timeline-slot-t>* {
+  width: 100%;
+}
+
+.timeline-owner-views-t,
+.created-updated-t {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
