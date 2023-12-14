@@ -1,13 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="index.css">
+  <link rel="shortcut icon" href="./src/utility/favicon/favicon.png" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
   <script type="module" src="index.js"></script>
-  <title>Social Media</title>
+  <title>MEMORY LANE</title>
 </head>
+
 <body>
-  
+  <div id="container">
+    <div id="social-media-login">
+      <div id="social-media-main">
+        <div class="social-media-msg">Memory Lane</div>
+        <div class="social-media-msg">Connect with us and share your story.</div>
+      </div>
+      <div id="form-container">
+        <form action="/login" method="post" id="login-form">
+          <div id="email-password-div">
+            <input type="email" name="email-input" id="email-input" placeholder="Email address" required>
+            <input type="password" name="password-input" id="password-input" placeholder="Password" required>
+          </div>
+          <div id="submit-div">
+            <input id="submit-btn" type="submit" value="Log in">
+          </div>
+          <div id="create-new-account-div">
+            <div>Create new account</div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </body>
+
 </html>
