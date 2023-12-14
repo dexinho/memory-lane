@@ -11,8 +11,12 @@
 
 :root {
   --primary-color: #BDC23D;
-  --tertiary-color: #C23DBD;
   --secondary-color: #3DBDC2;
+  --tertiary-color: #C23DBD;
+}
+
+html, body {
+  height: 100%;
 }
 
 #container {
@@ -21,12 +25,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: var(--primary-color);
 }
 
 #social-media-login {
   display: grid;
   grid-template-columns: 1fr 0.8fr;
-  background-color: var(--primary-color);
+  background-color: rgba(0, 0, 0, 0.2);
   padding: 2rem;
   max-width: 1000px;
   min-width: 600px;
@@ -116,12 +121,14 @@
   font-size: 0.8rem;
 }
 
-#create-new-account-div>div {
+#create-new-account-div>a {
   transition: scale 0.2s ease-in;
   cursor: pointer;
+  text-decoration: none;
+  color: black;
 }
 
-#create-new-account-div>div:hover {
+#create-new-account-div>a:hover {
   color: rgb(231, 219, 204);
   scale: 1.1;
 }
