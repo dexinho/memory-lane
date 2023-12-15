@@ -8,12 +8,17 @@ CREATE TABLE users_info (
     user_id INT PRIMARY KEY,
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(30) NOT NULL,
-    age INT,
-    birth_date DATE,
-    country VARCHAR(20),
+    FOREIGN KEY (profile_picture_id)
+        REFERENCES pictures (picture_id)
+        ON DELETE CASCADE,
     FOREIGN KEY (user_id)
         REFERENCES users (id)
         ON DELETE CASCADE
+);
+
+CREATE TABLE user_profile_picture(
+	user_id INT primary key unique,
+    picture_id INT
 );
 
 CREATE TABLE pictures (
@@ -21,14 +26,39 @@ CREATE TABLE pictures (
     picture_url VARCHAR(255) UNIQUE
 );
 
-CREATE TABLE user_pictures (
+CREATE TABLE timelines (
+    timeline_id INT PRIMARY KEY AUTO_INCREMENT,
+    timeline_title varchar(40),
+    background_color varchar(20),
+    font_color varchar(20),
+    is_public BOOLEAN,
     user_id INT,
-    pictures_id INT,
-    PRIMARY KEY (user_id , pictures_id),
+    view_count INT,
     FOREIGN KEY (user_id)
-        REFERENCES user_details (user_id)
-        ON DELETE CASCADE,
-    FOREIGN KEY (pictures_id)
-        REFERENCES pictures (id)
+        REFERENCES users (user_id)
         ON DELETE CASCADE
 );
+
+CREATE TABLE visits (
+    visit_id INT PRIMARY KEY AUTO_INCREMENT,
+    timeline_id INT,
+    visitor_user_id INT,
+    FOREIGN KEY (timeline_id) REFERENCES timelines(timeline_id) ON DELETE CASCADE,
+    FOREIGN KEY (visitor_user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE events (
+    event_id INT AUTO_INCREMENT,
+    event_date DATE,
+    picture_name VARCHAR(30),
+    picture_id VARCHAR(255),
+    timeline_id INT,
+    description TEXT,
+    FOREIGN KEY (timeline_id)
+        REFERENCES timelines (timeline_id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (picture_id)
+        REFERENCES pictures (picture_id)
+        ON DELETE CASCADE
+);
+
