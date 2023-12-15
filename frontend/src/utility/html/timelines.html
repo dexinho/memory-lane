@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="../../../index.js" defer></script>
   <title>Timelines</title>
 </head>
 
@@ -17,16 +18,18 @@
     <div id="timelines-div-t">
       <div id="timeline-user-profile-t">
         <div id="profile-header-t">
-          <div class="user-profile-pic-t"><img src="../../assets/example_pictures/example1.jpg" alt="pic"></div>
-          <div class="user-name-t">Jasmin Hidanovic</div>
+          <div class="user-profile-pic-t round-pic"><img id='user-profile-img-t'
+              src="../../assets/example_pictures/example1.jpg" alt="pic"></div>
+          <div class="user-name-t cursor-pointer scale-up">Jasmin Hidanovic</div>
         </div>
         <div id="log-out-div-t">
-          <button>Log out</button>
+          <button id="log-out-btn-t" class="cursor-pointer">Log out</button>
         </div>
       </div>
       <div id="timeline-slots-t">
-        <div id="sort-timelines-div-t">
-          <select id="sort-timelines-select-t">
+        <div id="sort-create-timelines-div-t">
+          <button id="create-new-timeline-btn-t" class="cursor-pointer">NEW TIMELINE</button>
+          <select id="sort-timelines-select-t" class="cursor-pointer">
             <option value="SORT BY" selected>SORT BY</option>
             <option value="views-asc">Views asc</option>
             <option value="views-des">Views des</option>
@@ -36,7 +39,11 @@
         </div>
         <div class="timeline-slot-t">
           <div class="timeline-owner-views-t">
-            <div class="owner-t">Enes Alomerovic</div>
+            <div class="owner-profile-name-t">
+              <div class="round-pic"><img class='timeline-owner-profile-picture-t'
+                  src="../../assets/example_pictures/example2.jpg" alt="pic"></div>
+              <div class="cursor-pointer scale-up">Enes Alomerovic</div>
+            </div>
             <div class="views-t">100 views</div>
           </div>
           <div class="timeline-description-div-t">
@@ -44,7 +51,8 @@
               Hello there, we enjoyed the trip to Hawaii. Check our memories.
             </div>
           </div>
-          <div class="timeline-picture-t"><img src="../../assets/example_pictures/example2.jpg" alt="pic"></div>
+          <div class="timeline-picture-t cursor-pointer"><img id='timeline-id-1'
+              src="../../assets/example_pictures/example2.jpg" alt="pic"></div>
           <div class="created-updated-t">
             <div class="created-t">
               <div>Created</div>
@@ -60,15 +68,20 @@
 
         <div class="timeline-slot-t">
           <div class="timeline-owner-views-t">
-            <div class="owner-t">Dino Delic</div>
-            <div class="views-t">13 views</div>
+            <div class="owner-profile-name-t">
+              <div class="round-pic"><img class='timeline-owner-profile-picture-t'
+                  src="../../assets/example_pictures/example3.jpg" alt="pic"></div>
+              <div class="cursor-pointer scale-up">Dino Delic</div>
+            </div>
+            <div class="views-t">100 views</div>
           </div>
           <div class="timeline-description-div-t">
             <div class="timeline-description-t">
               Hello there, we enjoyed cooking. Check our memories.
             </div>
           </div>
-          <div class="timeline-picture-t"><img src="../../assets/example_pictures/example3.jpg" alt="pic"></div>
+          <div class="timeline-picture-t cursor-pointer"><img id='timeline-id-2'
+              src="../../assets/example_pictures/example3.jpg" alt="pic"></div>
           <div class="created-updated-t">
             <div class="created-t">
               <div>Created</div>
