@@ -14,6 +14,20 @@ body {
   height: 100%;
 }
 
+.overflow {
+  overflow: hidden;
+}
+
+.body-cover {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 100vw;
+  height: 100vh;
+}
+
 :root {
   --primary-color: #BDC23D;
   --secondary-color: #3DBDC2;
@@ -33,29 +47,30 @@ body {
 }
 
 #timelines-div-t {
-  min-width: 400px;
-  max-width: 500px;
+  width: 600px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
+  gap: 1rem;
 }
 
 #timeline-user-profile-t {
   position: sticky;
   top: 0;
-  width: 100%;
+  z-index: 2;
+  width: 1000px;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 1rem;
   padding: 1rem;
-  background-color: aqua;
+  background-color: var(--secondary-color);
   border-top: 1rem solid var(--primary-color);
 }
 
-#timeline-user-profile-t > * {
+#profile-header-t {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -63,23 +78,15 @@ body {
   gap: 1rem;
 }
 
-#sort-timelines-div-t {
+#sort-create-timelines-div-t {
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-}
-
-.user-profile-pic-t {
-  width: 100px;
-  height: 100%;
-}
-
-.user-profile-pic-t>img {
-  width: 100%;
+  justify-content: space-between;
 }
 
 #timeline-slots-t {
+  width: 90%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -96,6 +103,7 @@ body {
   width: 100%;
   padding: 1rem;
   border: 2px solid black;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
 }
 
 .timeline-slot-t>* {
@@ -107,4 +115,104 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.timeline-picture-t {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timeline-picture-t>img {
+  width: 100%;
+  height: 100%;
+  transition: scale 0.2s ease-in;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.scale-up {
+  transition: scale 0.2s ease-in;
+}
+
+.scale-up:hover {
+  scale: 1.1;
+}
+
+.timeline-picture-t>img:hover {
+  scale: 1.05;
+}
+
+.created-t, .updated-t {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.created-t > * {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.updated-t > * {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+#log-out-btn-t, #sort-timelines-select-t, #create-new-timeline-btn-t {
+  width: 120px;
+  height: 2rem;
+  padding: 0.5rem;
+  color: whitesmoke;
+  font-weight: bold;
+}
+
+#sort-timelines-select-t {
+  background-color: blueviolet;
+}
+
+#create-new-timeline-btn-t {
+  background-color: royalblue;
+}
+
+#log-out-btn-t {
+  color: black;
+}
+
+.owner-profile-name-t {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.timeline-owner-profile-picture-t, #user-profile-img-t {
+  width: 40px;
+  height: 40px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.round-pic {
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: 100%;
+  width: 40px;
+  height: 40px;
+}
+
+button:hover, select:hover {
+  outline: 1px solid black;
 }
