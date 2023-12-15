@@ -1,28 +1,17 @@
 CREATE TABLE users (
-    users_id INT PRIMARY KEY AUTO_INCREMENT UNIQUE,
+    user_id INT PRIMARY KEY AUTO_INCREMENT UNIQUE,
+    user_picture_id INT,
     email VARCHAR(30) UNIQUE NOT NULL,
-    password VARCHAR(40) NOT NULL
-);
-
-CREATE TABLE users_info (
-    user_id INT PRIMARY KEY,
+    password VARCHAR(40) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(30) NOT NULL,
-    FOREIGN KEY (profile_picture_id)
+    FOREIGN KEY (user_picture_id)
         REFERENCES pictures (picture_id)
-        ON DELETE CASCADE,
-    FOREIGN KEY (user_id)
-        REFERENCES users (id)
-        ON DELETE CASCADE
-);
-
-CREATE TABLE user_profile_picture(
-	user_id INT primary key unique,
-    picture_id INT
 );
 
 CREATE TABLE pictures (
-    picture_id INT PRIMARY KEY AUTO_INCREMENT UNIQUE,
+    picture_id INT PRIMARY KEY AUTO_INCREMENT,
     picture_url VARCHAR(255) UNIQUE
 );
 
@@ -31,6 +20,7 @@ CREATE TABLE timelines (
     timeline_title varchar(40),
     background_color varchar(20),
     font_color varchar(20),
+    font_family varchar(30),
     is_public BOOLEAN,
     user_id INT,
     view_count INT,
@@ -39,7 +29,7 @@ CREATE TABLE timelines (
         ON DELETE CASCADE
 );
 
-CREATE TABLE visits (
+CREATE TABLE timeline_visits (
     visit_id INT PRIMARY KEY AUTO_INCREMENT,
     timeline_id INT,
     visitor_user_id INT,
@@ -47,7 +37,7 @@ CREATE TABLE visits (
     FOREIGN KEY (visitor_user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
-CREATE TABLE events (
+CREATE TABLE memories (
     event_id INT AUTO_INCREMENT,
     event_date DATE,
     picture_name VARCHAR(30),
