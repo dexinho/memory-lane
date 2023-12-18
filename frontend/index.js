@@ -9,7 +9,7 @@ submitBtn.addEventListener("click", async (e) => {
   e.preventDefault();
 
   try {
-    const response = await fetch(`${url}/validateLogin`, {
+    const response = await fetch(`${url}/login`, {
       method: "POST",
       body: JSON.stringify(Object.fromEntries(formEntries)),
       headers: {
@@ -19,7 +19,7 @@ submitBtn.addEventListener("click", async (e) => {
 
     if (response.ok) {
       const loggedUserData = await response.json();
-      const getTimelines = await fetch(`${url}/getTimelines`)
+      const getTimelines = await fetch(`${url}/getTimelines?amount=1`)
       const timelines = await getTimelines.json()
 
       console.log(loggedUserData)
