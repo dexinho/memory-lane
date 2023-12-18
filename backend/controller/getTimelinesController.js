@@ -5,9 +5,7 @@ const getTimelinesController = async (req, res) => {
     const amount = req.query.amount;
     const data = await getTimelinesModel(amount.toString());
 
-    if (data.length > 0) {
-      res.status(200).json(data);
-    } else res.sendStatus(404);
+    res.status(200).json(data);
   } catch (err) {
     res.sendStatus(500);
   }
