@@ -8,7 +8,7 @@ const loginController = async (req, res) => {
     console.log(userData)
 
     if (userData) res.status(200).json(userData[0]);
-    else res.sendStatus(404);
+    else res.sendStatus(400);
   } catch (err) {
     console.log(err);
     res.sendStatus(500);
