@@ -8,10 +8,10 @@ const uploadPictureRouter = require("./routers/uploadPictureRouter");
 const PORT = 3000;
 const host = "localhost";
 
-app.use(express.raw({ type: "application/octet-stream", limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(express.raw({ type: "application/octet-stream", limit: "10mb" }));
 app.use(express.json());
+app.use(cors());
 
 app.use("/login", loginRouter);
 app.use("/getTimelines", getTimelinesRouter);
