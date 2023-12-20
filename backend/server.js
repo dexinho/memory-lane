@@ -17,10 +17,6 @@ app.use("/login", loginRouter);
 app.use("/getTimelines", getTimelinesRouter);
 app.use("/uploadPicture", uploadPictureRouter);
 
-app.post("/test", (req, res) => {
-  console.log(req.body);
-});
-
 app.listen(PORT, () => {
   console.log(`Server listening on http://${host}:${PORT}`);
 });
