@@ -1,9 +1,9 @@
 const pool = require("./mySqlConnection");
 
-const uploadPictureModel = async (picturePath) => {
+const uploadPictureModel = async (pictureData) => {
   try {
-    await pool.execute(`INSERT INTO pictures(picture_url) VALUE(?)`, [
-      picturePath,
+    await pool.execute(`INSERT INTO pictures(picture_data) VALUE(?)`, [
+      pictureData,
     ]);
   } catch (err) {
     console.log(err);
