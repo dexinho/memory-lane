@@ -2,7 +2,7 @@ const uploadPictureModel = require('../models/uploadPictureModel')
 
 const uploadPictureController = async (req, res) => {
   try {
-    const picturePath = req.file.path;
+    const picturePath = req.body;
     await uploadPictureModel(picturePath);
     res.status(200);
   } catch (err) {
