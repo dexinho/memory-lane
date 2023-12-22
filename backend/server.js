@@ -3,7 +3,8 @@ const cors = require("cors");
 const app = express();
 const loginRouter = require("./routers/loginRouter");
 const timelinesRouter = require("./routers/timelinesRouter");
-const picturesRouter = require("./routers/picturesRouter");
+const uploadRouter = require("./routers/uploadRouter");
+const usersRouter = require("./routers/usersRouter");
 
 const PORT = 3000;
 const host = "localhost";
@@ -15,7 +16,8 @@ app.use(cors());
 
 app.use("/login", loginRouter);
 app.use("/timelines", timelinesRouter);
-app.use("/pictures", picturesRouter);
+app.use("/upload", uploadRouter);
+app.use('/users', usersRouter)
 
 app.listen(PORT, () => {
   console.log(`Server listening on http://${host}:${PORT}`);

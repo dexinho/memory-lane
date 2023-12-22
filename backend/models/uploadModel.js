@@ -1,8 +1,8 @@
 const pool = require("./connectionPool");
 
-const picturesModel = {};
+const uploadModel = {};
 
-const uploadPictureModel = async (pictureData) => {
+const picture = async (pictureData) => {
   try {
     await pool.execute(`INSERT INTO pictures(picture_data) VALUE(?)`, [
       pictureData,
@@ -12,6 +12,6 @@ const uploadPictureModel = async (pictureData) => {
   }
 };
 
-picturesModel.uploadPictureModel = uploadPictureModel;
+uploadModel.picture = picture;
 
-module.exports = picturesModel;
+module.exports = uploadModel;
