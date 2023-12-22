@@ -1,29 +1,38 @@
 drop database memory_lane;
-create database memory_lane;
-use memory_lane; 
 
-INSERT INTO users (user_picture_id, email, password_hash, first_name, last_name) VALUES
-    (1, 'test@gmail.com', '123', 'Jasmin', 'Hidanovic');
-insert into timelines(timeline_owner_id, timeline_picture_id, date_created, date_updated) values (1, 1, CURRENT_DATE(), CURRENT_DATE());
+INSERT INTO users (user_picture_id, user_email, user_password_hash, user_first_name, user_last_name) VALUES
+    (1, 'enes@gmail.com', '123', 'Enes', 'Alomerovic');
+INSERT INTO users (user_picture_id, user_email, user_password_hash, user_first_name, user_last_name) VALUES
+    (2, 'jasmin@gmail.com', '123', 'Jasmin', 'Hidanovic');
+    
+    
+INSERT INTO timelines(timeline_owner_id, timeline_picture_id, timeline_date_created, timeline_date_updated) values (2, 3, CURRENT_DATE(), CURRENT_DATE());
+INSERT INTO timelines(timeline_owner_id, timeline_picture_id, timeline_date_created, timeline_date_updated) values (2, 4, CURRENT_DATE(), CURRENT_DATE());
+INSERT INTO timelines(timeline_owner_id, timeline_picture_id, timeline_date_created, timeline_date_updated) values (3, 5, CURRENT_DATE(), CURRENT_DATE());
+INSERT INTO timelines(timeline_owner_id, timeline_picture_id, timeline_date_created, timeline_date_updated) values (3, 6, CURRENT_DATE(), CURRENT_DATE());
 
--- SELECT timeline_id, timeline_title, background_color, font_color, font_family, is_public, timeline_owner_id, view_count, date_created, date_updated, picture_url, first_name, last_name 
--- FROM timelines join users on timelines.timeline_owner_id = users.user_id 
--- join pictures on pictures.picture_id = 
--- LIMIT ?
+select * from timelines;
+
+SELECT
+      t.timeline_id,
+      t.timeline_title,
+      u.user_first_name,
+      u.user_last_name,
+      t.timeline_background_color,
+      t.timeline_font_color,
+      t.timeline_font_family,
+      t.timeline_is_public,
+      t.timeline_owner_id,
+      t.timeline_view_count,
+      t.timeline_date_created,
+      t.timeline_date_updated,
+      tp.picture_data AS timeline_picture_data
+  FROM
+      timelines t
+  JOIN
+      pictures tp ON t.timeline_picture_id = tp.picture_id
+  JOIN users u ON u.user_id = t.timeline_owner_id
+  ORDER BY t.timeline_id desc;
 
 drop trigger update_timeline_date;
-insert into timelines (date_created) value (CURRENT_DATE());
-insert into memories (memory_date, timeline_id) value ('2022-11-11', 2);
-SELECT 
-    *
-FROM
-    timelines;
-SELECT 
-    *
-FROM
-    users;
-SELECT 
-    *
-FROM
-    pictures;
-drop trigger increase_view_count;
+insert into memories (memory_date, memory_timeline_id) value ('2022-11-11', 2);

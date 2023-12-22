@@ -9,7 +9,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <script type="module" src="index.js"></script>
+  <script src="./src/utility/js/querySelectors.js" defer></script>
+  <script src="./src/utility/js/url.js" defer></script>
+  <script src="index.js" defer></script>
   <title>MEMORY LANE</title>
 </head>
 
@@ -17,6 +19,7 @@
   <div id="container">
     <div id="social-media-login">
       <div id="social-media-main">
+        <div id="login-pop-up-msg">Incorrect Email or Password!</div>
         <div id="social-media-welcome">
           <div class="social-media-msg">Memory Lane</div>
           <div class="social-media-msg">Connect with us and share your story.</div>
@@ -24,8 +27,8 @@
 
         <div id="example-pictures-div">
           <img class="example-pictures" src="./src/assets/example_pictures/example1.jpg" alt="person-with-the-camera">
-          <img class="example-pictures" src="./src/assets/example_pictures/example2.jpg" alt="hands">
           <img class="example-pictures" src="./src/assets/example_pictures/example3.jpg" alt="happy-person">
+          <img class="example-pictures" src="./src/assets/example_pictures/example2.jpg" alt="hands">
         </div>
       </div>
       <div id="form-container">
@@ -38,7 +41,7 @@
             <input id="submit-btn" type="submit" value="Log in">
           </div>
           <div id="create-new-account-div">
-            <a href="./src/utility/html/registration.html">Create new account</a>
+            New to Memory Lane?<a href="./src/utility/html/registration.html">Create new account</a>
           </div>
         </form>
       </div>

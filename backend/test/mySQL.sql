@@ -1,3 +1,6 @@
+create database memory_lane;
+use memory_lane; 
+
 CREATE TABLE pictures (
     picture_id INT PRIMARY KEY AUTO_INCREMENT,
     picture_data LONGBLOB
@@ -6,10 +9,10 @@ CREATE TABLE pictures (
 CREATE TABLE users (
     user_id INT PRIMARY KEY AUTO_INCREMENT,
     user_picture_id INT,
-    email VARCHAR(30) UNIQUE,
-    password_hash VARCHAR(255),
-    first_name VARCHAR(30),
-    last_name VARCHAR(30),
+    user_email VARCHAR(30) UNIQUE,
+    user_password_hash VARCHAR(255),
+    user_first_name VARCHAR(30),
+    User_last_name VARCHAR(30),
     FOREIGN KEY (user_picture_id)
         REFERENCES pictures (picture_id)
 );
@@ -18,15 +21,15 @@ CREATE TABLE users (
 CREATE TABLE timelines (
     timeline_id INT PRIMARY KEY AUTO_INCREMENT,
     timeline_title VARCHAR(40) default 'timeline',
-    background_color VARCHAR(20) default '#BDC23D',
-    font_color VARCHAR(20) default 'black',
-    font_family VARCHAR(30) default 'sans-serif',
-    is_public BOOLEAN DEFAULT FALSE,
+    timeline_background_color VARCHAR(20) default '#BDC23D',
+    timeline_font_color VARCHAR(20) default 'black',
+    timeline_font_family VARCHAR(30) default 'sans-serif',
+    timeline_is_public BOOLEAN DEFAULT FALSE,
     timeline_owner_id INT,
     timeline_picture_id INT,
-    view_count INT DEFAULT 0,
-    date_created DATE,
-    date_updated DATE,
+    timeline_view_count INT DEFAULT 0,
+    timeline_date_created DATE,
+    timeline_date_updated DATE,
     FOREIGN KEY (timeline_owner_id)
         REFERENCES users (user_id)
         ON DELETE CASCADE,
@@ -36,13 +39,13 @@ CREATE TABLE timelines (
 );
 
 CREATE TABLE timeline_visits (
-    visit_id INT PRIMARY KEY AUTO_INCREMENT,
-    timeline_id INT,
-    visitor_user_id INT,
-    FOREIGN KEY (timeline_id)
+    timeline_visit_id INT PRIMARY KEY AUTO_INCREMENT,
+    timeline_visit_timeline_id INT,
+    timeline_visit_user_id INT,
+    FOREIGN KEY (timeline_visit_timeline_id)
         REFERENCES timelines (timeline_id)
         ON DELETE CASCADE,
-    FOREIGN KEY (visitor_user_id)
+    FOREIGN KEY (timeline_visit_user_id)
         REFERENCES users (user_id)
         ON DELETE CASCADE
 );
@@ -50,14 +53,14 @@ CREATE TABLE timeline_visits (
 CREATE TABLE memories (
     memory_id INT PRIMARY KEY AUTO_INCREMENT,
     memory_date DATE,
-    picture_name VARCHAR(30),
-    picture_id INT,
-    timeline_id INT,
+    memory_picture_name VARCHAR(30),
+    memory_picture_id INT,
+    memory_timeline_id INT,
     description TEXT,
-    FOREIGN KEY (timeline_id)
+    FOREIGN KEY (memory_timeline_id)
         REFERENCES timelines (timeline_id)
         ON DELETE CASCADE,
-    FOREIGN KEY (picture_id)
+    FOREIGN KEY (memory_picture_id)
         REFERENCES pictures (picture_id)
         ON DELETE CASCADE
 );
@@ -70,24 +73,23 @@ INSERT
 UPDATE
     timelines
 SET
-    view_count = view_count + 1
+    timeline_view_count = timeline_view_count + 1
 WHERE
-    timeline_id = NEW.timeline_id
-    AND NEW.visitor_user_id <> timeline_owner_id;
+    timeline_id = NEW.timeline_visit_timeline_id
+    AND NEW.timeline_visit_user_id <> timeline_owner_id;
 
 END // 
 DELIMITER ;
 
-CREATE TRIGGER update_timeline_date
-AFTER INSERT ON memories
-FOR EACH ROW
-UPDATE timeline
-SET date_updated = CURRENT_DATE()
-WHERE timeline_id = NEW.timeline_id;
+CREATE 
+    TRIGGER  update_timeline_date
+ AFTER INSERT ON memories FOR EACH ROW 
+    UPDATE timeline SET timeline_date_updated = CURRENT_DATE() WHERE
+        timeline_id = NEW.memory_timeline_id;
 
-create trigger update_current_timeline_picture
-after insert on memories
-for each row
-update timelines
-set timeline_picture_id = new.picture_id
-where timeline_id = new.timeline_id and new.picture_id is not null;
+CREATE 
+    TRIGGER  update_current_timeline_picture
+ AFTER INSERT ON memories FOR EACH ROW 
+    UPDATE timelines SET timeline_picture_id = new.memory_picture_id WHERE
+        timeline_id = new.memory_timeline_id
+            AND new.memory_picture_id IS NOT NULL;

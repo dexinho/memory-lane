@@ -1,40 +1,37 @@
-const loginForm = document.querySelector("#login-form");
-const submitBtn = document.querySelector("#submit-btn");
-import { displayLoggedUser, displayTimelines } from "./src/utility/js/loginSuccessful.js";
-import { host, PORT } from "./src/utility/js/url.js";
+if (submitBtn) {
+  submitBtn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    const formEntries = new FormData(loginForm);
 
-submitBtn.addEventListener("click", async (e) => {
-  const formEntries = new FormData(loginForm);
-  const url = `http://${host}:${PORT}`
-  e.preventDefault();
+    try {
+      const response = await fetch(`${url}/login/validate`, {
+        method: "POST",
+        body: JSON.stringify(Object.fromEntries(formEntries)),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-  try {
-    const response = await fetch(`${url}/login`, {
-      method: "POST",
-      body: JSON.stringify(Object.fromEntries(formEntries)),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (response.ok) {
-      const loggedUserData = await response.json();
-      const getTimelines = await fetch(`${url}/getTimelines?amount=1`)
-      const timelines = await getTimelines.json()
-
-      console.log(loggedUserData)
-      console.log(timelines)
-
-      // displayLoggedUser(loggedUserData)
-      // displayTimelines(timelines)
-    } else if (response.status === 404){
-      console.log('login failed')
-      // loginFailed()
-    } else {
-      console.log('server error')
+      if (response.ok) {
+        localStorage.setItem(
+          "loggedUserEmail",
+          JSON.stringify(formEntries.get("email_input"))
+        );
+        const a = document.createElement("a");
+        a.href = "./src/utility/html/timelines.html";
+        a.click();
+      } else if (response.status === 400) {
+        loginPopUpMsg.style.display = 'block'
+        setTimeout(() => {
+          loginPopUpMsg.style.display = 'none'
+        }, 1000)
+        console.log("login failed");
+        // loginFailed()
+      } else {
+        console.log("server error");
+      }
+    } catch (err) {
+      console.log(err);
     }
-
-  } catch (err) {
-    console.log(err);
-  }
-});
+  });
+}
