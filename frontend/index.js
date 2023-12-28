@@ -1,10 +1,13 @@
+import { submitBtn, loginPopUpMsg, loginForm } from "./src/utility/js/querySelectors.js";
+import { URL } from "./src/utility/js/globalVar.js";
+
 if (submitBtn) {
   submitBtn.addEventListener("click", async (e) => {
     e.preventDefault();
     const formEntries = new FormData(loginForm);
 
     try {
-      const response = await fetch(`${url}/login/validate`, {
+      const response = await fetch(`${URL}/login/validate`, {
         method: "POST",
         body: JSON.stringify(Object.fromEntries(formEntries)),
         headers: {
