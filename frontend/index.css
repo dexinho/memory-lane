@@ -41,6 +41,7 @@ body {
 }
 
 #social-media-main {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -108,7 +109,7 @@ body {
   justify-content: center;
 }
 
-#submit-btn {
+#submit-login-btn {
   width: 80%;
   height: 2rem;
   font-size: 1.2rem;
@@ -125,21 +126,20 @@ body {
 }
 
 #create-new-account-div>a {
-  transition: scale 0.2s ease-in;
   cursor: pointer;
   text-decoration: none;
   font-weight: bold;
-  color: var(--tertiary-color)
+  color: var(--tertiary-color);
+  translate: -0.5rem;
 }
 
 #create-new-account-div>a:hover {
   color: rgb(231, 219, 204);
-  scale: 1.1;
 }
 
-button:hover,
-input[type='submit'] {
+#submit-login-btn:hover {
   cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 #example-pictures-div {
@@ -178,14 +178,13 @@ input[type='submit'] {
   position: absolute;
   align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-  background-color: rgba(0, 0, 0, 0.2);
-  color: #ac2267;
+  background-color: black;
+  top: 50%;
   left: 50%;
-  top: -200%;
-  transform: translate(-50%, 500%);
+  transform: translate(-50%, -50%);
   padding: 2rem;
   font-size: 2rem;
   border-radius: 2rem;
+  color: var(--tertiary-color);
+  z-index: 1000;
 }
