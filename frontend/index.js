@@ -1,13 +1,17 @@
-import { submitBtn, loginPopUpMsg, loginForm } from "./src/utility/js/querySelectors.js";
+import {
+  submitLoginBtn,
+  loginPopUpMsg,
+  loginForm,
+} from "./src/utility/js/querySelectors.js";
 import { URL } from "./src/utility/js/globalVar.js";
 
-if (submitBtn) {
-  submitBtn.addEventListener("click", async (e) => {
+if (submitLoginBtn) {
+  submitLoginBtn.addEventListener("click", async (e) => {
     e.preventDefault();
     const formEntries = new FormData(loginForm);
 
     try {
-      const response = await fetch(`${URL}/login/validate`, {
+      const response = await fetch(`${URL}/authentication/validate`, {
         method: "POST",
         body: JSON.stringify(Object.fromEntries(formEntries)),
         headers: {
@@ -23,18 +27,20 @@ if (submitBtn) {
         const a = document.createElement("a");
         a.href = "./src/utility/html/timelines.html";
         a.click();
-      } else if (response.status === 400) {
-        loginPopUpMsg.style.display = 'block'
-        setTimeout(() => {
-          loginPopUpMsg.style.display = 'none'
-        }, 1000)
-        console.log("login failed");
-        // loginFailed()
-      } else {
-        console.log("server error");
-      }
+      } else if (response.status === 400)
+        displayPopUpMsg("Incorrect Email or Password!");
+      else displayPopUpMsg("Server error");
     } catch (err) {
       console.log(err);
     }
   });
 }
+
+const displayPopUpMsg = (msg) => {
+  loginPopUpMsg.style.display = "block";
+  loginPopUpMsg.textContent = msg;
+
+  setTimeout(() => {
+    loginPopUpMsg.style.display = "none";
+  }, 1000);
+};
