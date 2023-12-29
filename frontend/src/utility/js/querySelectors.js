@@ -6,12 +6,16 @@ export const loginPopUpMsg = document.querySelector("#login-pop-up-msg");
 export const timelineUserProfileT = document.querySelector("#timeline-user-profile-t");
 export const timelinePicDivT = document.querySelectorAll(".timeline-picture-div-t");
 export const userProfilePicT = document.querySelector("#user-profile-pic-div-t");
+export const registrationPopUpMsgR = document.querySelector('#registration-pop-up-msg-r')
 
 // Buttons
-export const submitBtn = document.querySelector("#submit-btn");
+export const submitLoginBtn = document.querySelector("#submit-login-btn");
+export const submitRegisterBtn = document.querySelector("#submit-register-btn-r");
 export const logOutBtnT = document.querySelector("#log-out-btn-t");
-
-// Images
+export const passwordInputR = document.querySelector('#password-input-r')
+export const confirmPasswordInputR = document.querySelector('#confirm-password-input-r')
 
 // Forms
 export const loginForm = document.querySelector("#login-form");
+export const registrationFormR = document.querySelector('#registration-form-r')
+
