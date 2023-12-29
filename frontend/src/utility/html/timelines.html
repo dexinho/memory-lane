@@ -9,9 +9,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <script src="../js/querySelectors.js" defer></script>
-  <script src="../js/url.js" defer></script>
-  <script src="../js/displayFrontPage.js" defer></script>
+  <script src="../js/displayFrontPage.js" type="module"></script>
   <title>Timelines</title>
 </head>
 
@@ -24,26 +22,29 @@
     <div id="timelines-div-t">
       <div id="timeline-user-profile-t">
         <div id="profile-header-t">
-          <div id='user-profile-pic-div-t' class="round-pic">
+          <div id="user-profile-pic-holder-t">
+            <div id='user-profile-pic-div-t' class="round-pic"></div>
+            <div class="user-name-t cursor-pointer hover-name">Jasmin Hidanovic</div>
           </div>
-          <div class="user-name-t cursor-pointer scale-up">Jasmin Hidanovic</div>
+        </div>
+        <div id="search-create-timelines-div-t">
+          <div id="search-create-holder-t">
+            <div>
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input id="search-user-input-t" type="text" placeholder="Find user">
+            </div>
+            <div>
+              <button id="create-new-timeline-btn-t" class="cursor-pointer">CREATE NEW TIMELINE</button>
+            </div>
+          </div>
         </div>
         <div id="log-out-div-t">
           <button id="log-out-btn-t" class="cursor-pointer">Log out</button>
         </div>
       </div>
-      <!-- <div id="timeline-slots-t">
-        <div id="sort-create-timelines-div-t">
-          <button id="create-new-timeline-btn-t" class="cursor-pointer">NEW TIMELINE</button>
-          <select id="sort-timelines-select-t" class="cursor-pointer">
-            <option value="SORT BY" selected>SORT BY</option>
-            <option value="views-asc">Views asc</option>
-            <option value="views-des">Views des</option>
-            <option value="old">Old</option>
-            <option value="new">New</option>
-          </select>
-        </div> -->
-      <!-- <div class="timeline-slot-t">
+      <div id="timeline-slots-t">
+
+        <!-- <div class="timeline-slot-t">
           <div class="timeline-owner-views-t">
             <div class="owner-profile-name-t">
               <div class="round-pic"><img class='timeline-owner-profile-picture-t'
@@ -100,8 +101,8 @@
           </div>
           <div class="timeline-slot-view-count-t"></div>
         </div> -->
+      </div>
     </div>
-  </div>
   </div>
 </body>
 
