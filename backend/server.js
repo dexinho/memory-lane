@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const loginRouter = require("./routers/loginRouter");
+const authenticationRouter = require("./routers/authenticationRouter");
 const timelinesRouter = require("./routers/timelinesRouter");
 const uploadRouter = require("./routers/uploadRouter");
 const usersRouter = require("./routers/usersRouter");
@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 
-app.use("/login", loginRouter);
+app.use("/authentication", authenticationRouter);
 app.use("/timelines", timelinesRouter);
 app.use("/upload", uploadRouter);
 app.use('/users', usersRouter)
