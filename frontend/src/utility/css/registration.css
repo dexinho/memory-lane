@@ -72,6 +72,10 @@ form>* {
   gap: 1rem;
 }
 
+#email-password-div-r>* {
+  width: 100%;
+}
+
 .form-inputs-r {
   width: 100%;
   padding: 1rem;
@@ -96,10 +100,54 @@ input[type='submit'] {
   cursor: pointer;
 }
 
-#submit-btn-r {
-  width: 50%;
+#user-info-div-r {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+#submit-div-r {
+  width: 100%;
+}
+
+#registration-header-r {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#submit-register-btn-r {
+  width: 100%;
   font-size: 1.5rem;
   height: 2.5rem;
-  background-color: var(--secondary-color);
+  color: var(--secondary-color);
+  background-color: rgba(0, 0, 0, 0.5);
+  margin-top: 1rem;
+}
+
+#submit-register-btn-r:hover {
+  background-color: var(--tertiary-color)
+}
+
+#already-have-an-account-r {
+  color: whitesmoke;
+}
+
+#already-have-an-account-r>a {
+  color: var(--primary-color);
+  text-decoration: none;
+  translate: -0.5rem;
+}
+
+#already-have-an-account-r>a:hover {
+  color: var(--secondary-color);
+}
+
+#registration-pop-up-msg-r {
+  display: none;
+  position: absolute;
+  background-color: black;
+  font-size: 2rem;
+  text-align: center;
   color: var(--tertiary-color);
+  padding: 2rem;
 }
