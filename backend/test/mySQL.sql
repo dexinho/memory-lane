@@ -8,7 +8,7 @@ CREATE TABLE pictures (
 
 CREATE TABLE users (
     user_id INT PRIMARY KEY AUTO_INCREMENT,
-    user_picture_id INT,
+    user_picture_id INT default 1,
     user_email VARCHAR(30) UNIQUE,
     user_password_hash VARCHAR(255),
     user_first_name VARCHAR(30),
