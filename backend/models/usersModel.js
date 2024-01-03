@@ -39,7 +39,24 @@ const data = async (email) => {
   }
 };
 
+const search = async (query) => {
+  try {
+    const [userData] = await connection.execute(
+      `SELECT user_id, user_first_name, user_last_name, picture_data 
+    FROM users join pictures
+    on users.user_picture_id = pictures.picture_id
+    where CONCAT(user_first_name, ' ', user_last_name) LIKE ?`,
+      [`%${query}%`]
+    );
+
+    return userData;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 usersModel.getProfilePicture = getProfilePicture;
 usersModel.data = data;
+usersModel.search = search;
 
 module.exports = usersModel;
