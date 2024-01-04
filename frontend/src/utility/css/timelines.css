@@ -74,6 +74,7 @@ body {
 }
 
 #search-create-holder-t {
+  position: relative;
   width: 100%;
   display: flex;
   align-items: center;
@@ -114,6 +115,15 @@ body {
   z-index: 2;
   left: 1rem;
   top: 0.5rem;
+}
+
+#refresh-search-bar-t {
+  display: none;
+  position: absolute;
+  z-index: 2;
+  right: 1rem;
+  top: 0.5rem;
+  cursor: pointer;
 }
 
 #search-user-input-t {
@@ -329,4 +339,51 @@ select:hover {
   border-radius: 1rem;
   padding: 0.2rem 1rem;
   color: whitesmoke;
+}
+
+#search-window-holder-t {
+  display: none;
+  position: absolute;
+  top: 1.5rem;
+  padding: 1rem;
+  z-index: 3;
+}
+
+#search-window-slots-t,
+.search-window-slot-t {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
+.search-window-slot-t {
+  border: 1px solid;
+}
+
+.search-window-slot-t:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+#search-window-slots-t {
+  max-height: 400px;
+  overflow-y: auto;
+  background-color: white;
+}
+
+.search-window-slot-picture-t {
+  width: 80px;
+  height: 80px;
+  border-radius: 100%;
+  overflow: hidden;
+}
+
+.search-window-slot-picture-t>* {
+  width: 100%;
+  height: 100%;
 }
