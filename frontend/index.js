@@ -1,6 +1,6 @@
 import {
   submitLoginBtn,
-  loginPopUpMsg,
+  loginPopUpMsgT,
   loginForm,
 } from "./src/utility/js/querySelectors.js";
 import { URL } from "./src/utility/js/globalVar.js";
@@ -37,10 +37,10 @@ if (submitLoginBtn) {
 }
 
 const displayPopUpMsg = (msg) => {
-  loginPopUpMsg.style.display = "block";
-  loginPopUpMsg.textContent = msg;
+  loginPopUpMsgT.style.display = "block";
+  loginPopUpMsgT.textContent = msg;
 
   setTimeout(() => {
-    loginPopUpMsg.style.display = "none";
+    loginPopUpMsgT.style.display = "none";
   }, 1000);
 };
