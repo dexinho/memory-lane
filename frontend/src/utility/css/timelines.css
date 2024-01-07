@@ -583,7 +583,6 @@ select:hover {
   background-color: var(--primary-color);
   font-size: 1.2rem;
   border-radius: 1rem;
-  padding: 1rem;
 }
 
 #timeline-publish-btn-t:hover {
