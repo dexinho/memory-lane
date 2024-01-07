@@ -20,11 +20,98 @@
       Success!
     </div>
     <dialog id="timeline-creation-dialog-t">
-      <div id="timeline-creation-header-t">
-        <div></div>
-        <div>Timeline creation</div>
-        <button id="close-timeline-creation-btn-t"><i class="fa-solid fa-xmark"></i></button>
+      <div>
+        <div id="timeline-creation-header-t">
+          <div class="width-50"></div>
+          <div id="timeline-creation-title-t">TIMELINE CREATION</div>
+          <button id="close-timeline-creation-btn-t"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="timeline-creation-holder-t">
+          <div id="timeline-creation-form-holder-t">
+            <div id="timeline-creation-title-t">Settings: </div>
+            <form action="POST" id="timeline-creation-form-t">
+              <div id="timeline-creation-inputs-t">
+                <div>
+                  <label for="timeline-font-style-input-t">Font Style: </label>
+                  <input type="text" class="timeline-settings-input-t" id="timeline-font-style-input-t" placeholder="sans-serif">
+                </div>
+                <div>
+                  <label for="timeline-font-color-input-t">Font Color: </label>
+                  <input type="text" class="timeline-settings-input-t" id="timeline-font-color-input-t" placeholder="black">
+                </div>
+                <div>
+                  <label for="timeline-background-color-input-t">Background Color: </label>
+                  <input type="text" class="timeline-settings-input-t" id="timeline-background-color-input-t" placeholder="black">
+                </div>
+                <div id="timeline-is-public-div-t">
+                  <label for="timeline-is-public-input-t">Public: </label>
+                  <input type="checkbox" id="timeline-is-public-input-t" checked>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div id="timeline-memories-div-t"><div>Memories: </div></div>
+          <div class="timeline-memory-slots-t">
+            <div class="timeline-memory-slot-t">
+              <form action="POST" class="timeline-memory-form-t">
+                <div class="timeline-memory-number-t">1</div>
+                <div class="timeline-memory-inputs-t">
+                  <textarea name="memory_description_textarea_t" class="memory-description-textarea-t" cols="30"
+                    rows="5" placeholder="Memory description..."></textarea>
+                  <input class="memory-picture-input-t" name='memory_picture_input_t' for='memory-picture-input-t'
+                    type="file">
+                  <div><button class="upload-memory-picture-btn-t">UPLOAD PICTURE</button></div>
+                  <div class="uploaded-memory-picture-holder-t">
+                    <img src="../../assets/example_pictures/black_bicycle.jpg">
+                  </div>
+                </div>
+                <div><i class="fa-solid fa-trash"></i></div>
+              </form>
+            </div>
+            <div class="timeline-memory-slot-t">
+              <form action="POST" class="timeline-memory-form-t">
+                <div class="timeline-memory-number-t">2</div>
+                <div class="timeline-memory-inputs-t">
+                  <textarea name="memory_description_textarea_t" class="memory-description-textarea-t" cols="30"
+                    rows="5" placeholder="Memory description..."></textarea>
+                  <input class="memory-picture-input-t" name='memory_picture_input_t' for='memory-picture-input-t'
+                    type="file">
+                  <div><button class="upload-memory-picture-btn-t">UPLOAD PICTURE</button></div>
+                  <div class="uploaded-memory-picture-holder-t">
+                    <img src="../../assets/example_pictures/black_shades.jpg">
+                  </div>
+                </div>
+                <div><i class="fa-solid fa-trash"></i></div>
+              </form>
+            </div>
+            <div class="timeline-memory-slot-t">
+              <form action="POST" class="timeline-memory-form-t">
+                <div class="timeline-memory-number-t">3</div>
+                <div class="timeline-memory-inputs-t">
+                  <textarea name="memory_description_textarea_t" class="memory-description-textarea-t" cols="30"
+                    rows="5" placeholder="Memory description..."></textarea>
+                  <input class="memory-picture-input-t" name='memory_picture_input_t' for='memory-picture-input-t'
+                    type="file">
+                  <div><button class="upload-memory-picture-btn-t">UPLOAD PICTURE</button></div>
+                  <div class="uploaded-memory-picture-holder-t">
+                    <img src="../../assets/example_pictures/example1.jpg">
+                  </div>
+                </div>
+                <div><i class="fa-solid fa-trash timeline-remove-slot-t"></i></div>
+              </form>
+            </div>
+          </div>
+
+          <div id="timeline-new-memory-div-t">
+            <button id="timeline-new-memory-btn-t"><i class="fa-solid fa-plus"></i></button>
+          </div>
+
+          <div id="timeline-publish-div-t">
+            <button id="timeline-publish-btn-t">PUBLISH</button>
+          </div>
+        </div>
       </div>
+
     </dialog>
     <div id="timelines-div-t">
       <div id="timeline-user-profile-t">
@@ -44,19 +131,27 @@
             <div id="search-window-holder-t">
               <div id="search-window-slots-t">
                 <div class="search-window-slot-t" id="search-window-slot-t-user-email">
-                  <div class="search-window-slot-picture-t"><img src="https://i0.wp.com/picjumbo.com/wp-content/uploads/beautiful-nature-mountain-scenery-with-flowers-free-photo.jpg?w=600&quality=80" alt=""></div>
+                  <div class="search-window-slot-picture-t"><img
+                      src="https://i0.wp.com/picjumbo.com/wp-content/uploads/beautiful-nature-mountain-scenery-with-flowers-free-photo.jpg?w=600&quality=80"
+                      alt=""></div>
                   <div class="search-window-slot-name-t">Nature Greeninho</div>
                 </div>
                 <div class="search-window-slot-t">
-                  <div class="search-window-slot-picture-t"><img src="https://i0.wp.com/picjumbo.com/wp-content/uploads/beautiful-nature-mountain-scenery-with-flowers-free-photo.jpg?w=600&quality=80" alt=""></div>
+                  <div class="search-window-slot-picture-t"><img
+                      src="https://i0.wp.com/picjumbo.com/wp-content/uploads/beautiful-nature-mountain-scenery-with-flowers-free-photo.jpg?w=600&quality=80"
+                      alt=""></div>
                   <div class="search-window-slot-name-t">Nature Yellow</div>
                 </div>
                 <div class="search-window-slot-t">
-                  <div class="search-window-slot-picture-t"><img src="https://i0.wp.com/picjumbo.com/wp-content/uploads/beautiful-nature-mountain-scenery-with-flowers-free-photo.jpg?w=600&quality=80" alt=""></div>
+                  <div class="search-window-slot-picture-t"><img
+                      src="https://i0.wp.com/picjumbo.com/wp-content/uploads/beautiful-nature-mountain-scenery-with-flowers-free-photo.jpg?w=600&quality=80"
+                      alt=""></div>
                   <div class="search-window-slot-name-t">Nature a</div>
                 </div>
                 <div class="search-window-slot-t">
-                  <div class="search-window-slot-picture-t"><img src="https://i0.wp.com/picjumbo.com/wp-content/uploads/beautiful-nature-mountain-scenery-with-flowers-free-photo.jpg?w=600&quality=80" alt=""></div>
+                  <div class="search-window-slot-picture-t"><img
+                      src="https://i0.wp.com/picjumbo.com/wp-content/uploads/beautiful-nature-mountain-scenery-with-flowers-free-photo.jpg?w=600&quality=80"
+                      alt=""></div>
                   <div class="search-window-slot-name-t">Nature sss</div>
                 </div>
               </div>
