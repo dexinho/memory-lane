@@ -4,13 +4,17 @@ const timelineSlotsT = document.createElement("div");
 import {
   timelineUserProfileT,
   timelinesDivT,
-  loginPopUpMsg,
+  loginPopUpMsgT,
   userNameT,
   userProfilePicT,
   logOutBtnT,
 } from "./querySelectors.js";
 
+import { getPicURL } from "./getPicURL.js";
 import { URL } from "./globalVar.js";
+import { handleUserSearch } from "./findUser.js";
+import { handleTimelineCreation } from "./createTimeline.js";
+import { scroll } from "./timelines.js";
 
 const displayFrontPage = async () => {
   try {
@@ -19,7 +23,7 @@ const displayFrontPage = async () => {
     userProfileImgT.id = "user-profile-img-t";
 
     timelinesDivT.style.display = "none";
-    loginPopUpMsg.style.display = "flex";
+    loginPopUpMsgT.style.display = "flex";
     timelineUserProfileT.style.position = "none";
 
     const getTimelines = await fetch(`${URL}/timelines/get-timelines`);
@@ -43,7 +47,7 @@ const displayFrontPage = async () => {
 
       timelineUserProfileT.style.display = "grid";
       timelinesDivT.style.display = "flex";
-      loginPopUpMsg.style.display = "none";
+      loginPopUpMsgT.style.display = "none";
     }
   } catch (err) {
     console.log(err);
@@ -219,26 +223,6 @@ export const displayTimelines = async (timelines) => {
   });
 };
 
-const getPicURL = (picture) => {
-  return new Promise((res, rej) => {
-    if (!picture) "../../assets/example_pictures/robot.png";
-
-    const uint8 = new Uint8Array(picture);
-    const blob = new Blob([uint8], { type: "image/jpeg" });
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      res(reader.result);
-    };
-
-    reader.onerror = () => {
-      rej(error);
-    };
-
-    reader.readAsDataURL(blob);
-  });
-};
-
 logOutBtnT.addEventListener("click", () => {
   const a = document.createElement("a");
   a.href = "../../../index.html";
@@ -246,3 +230,6 @@ logOutBtnT.addEventListener("click", () => {
 });
 
 displayFrontPage();
+handleUserSearch();
+handleTimelineCreation()
+scroll()
