@@ -5,10 +5,10 @@ const uploadController = {};
 const picture = async (req, res) => {
   try {
     const picturePath = req.body;
-    await uploadModel.picture(picturePath);
+    const pictureID = await uploadModel.picture(picturePath);
 
     console.log("Picture uploaded successfully");
-    res.status(200);
+    res.status(200).json(pictureID);
   } catch (err) {
     res.sendStatus(500);
   }
