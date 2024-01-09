@@ -3,11 +3,9 @@ const authenticationController = {};
 
 const validate = async (req, res) => {
   try {
-    const userData = await authenticationModel.validate(req.body);
+    const userID = await authenticationModel.validate(req.body);
 
-    console.log("validateLoginController", userData);
-
-    if (userData) res.sendStatus(200);
+    if (userID) res.status(200).json(userID);
     else res.sendStatus(400);
   } catch (err) {
     console.log(err);
@@ -19,8 +17,6 @@ const register = async (req, res) => {
   console.log(req.body);
   try {
     const sqlState = await authenticationModel.register(req.body);
-
-    console.log(sqlState)
 
     if (sqlState === "00000") res.sendStatus(200);
     else if (sqlState === "23000") res.sendStatus(409);
