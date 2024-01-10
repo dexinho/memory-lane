@@ -1,31 +1,38 @@
 import { URL } from "./globalVar.js";
 
-const timelineCreationDialogT = document.querySelector(
-  "#timeline-creation-dialog-t"
-);
-const createNewTimelineBtnT = document.querySelector(
-  "#create-new-timeline-btn-t"
-);
-const closeTimelineCreationBtnT = document.querySelector(
-  "#close-timeline-creation-btn-t"
-);
+const confirmationPopUpMsg = (msg) => {
+  const confirmationPopUpT = document.querySelector("#confirmation-pop-up-t");
 
-const timelineNewMemoryBtnT = document.querySelector(
-  "#timeline-new-memory-btn-t"
-);
-const uploadedPictureHolderDiv = document.querySelector(
-  ".uploaded-memory-picture-holder-t"
-);
-const uploadBtn = document.querySelector(".upload-memory-picture-btn-t");
-const formElement = document.querySelector(".timeline-memory-form-t");
-const inputElement = document.querySelector(".memory-picture-input-t");
-const timelineMemoriesCountDivT = document.querySelector(
-  "#timeline-memories-count-div-t"
-);
+  confirmationPopUpT.textContent = msg;
+  confirmationPopUpT.showModal();
+  document.body.style.overflow = "auto";
 
-const timelinePublishBtnT = document.querySelector("#timeline-publish-btn-t");
+  setTimeout(() => {
+    confirmationPopUpT.close();
+  }, 2000);
+};
 
 export const handleTimelineCreation = () => {
+  const uploadBtn = document.querySelector(".upload-memory-picture-btn-t");
+  const timelineCreationDialogT = document.querySelector(
+    "#timeline-creation-dialog-t"
+  );
+  const createNewTimelineBtnT = document.querySelector(
+    "#create-new-timeline-btn-t"
+  );
+  const closeTimelineCreationBtnT = document.querySelector(
+    "#close-timeline-creation-btn-t"
+  );
+  const timelineNewMemoryBtnT = document.querySelector(
+    "#timeline-new-memory-btn-t"
+  );
+  const uploadedPictureHolderDiv = document.querySelector(
+    ".uploaded-memory-picture-holder-t"
+  );
+  const inputElement = document.querySelector(".memory-picture-input-t");
+  const formElement = document.querySelector(".timeline-memory-form-t");
+  const timelinePublishBtnT = document.querySelector("#timeline-publish-btn-t");
+
   createNewTimelineBtnT.addEventListener("click", () => {
     timelineCreationDialogT.showModal();
     document.body.style.overflow = "hidden";
@@ -53,6 +60,7 @@ const addTimelineSlot = () => {
     ".timeline-memory-slots-t"
   );
   const memorySlotDiv = document.createElement("div");
+
   memorySlotDiv.classList.add("timeline-memory-slot-t");
 
   const formElement = document.createElement("form");
@@ -126,31 +134,19 @@ const addTimelineSlot = () => {
 const handleMemorySlotUpload = ({
   uploadBtn,
   formElement,
-  inputElement,
+  inputElement: picUpload,
   uploadedPictureHolderDiv,
 }) => {
   uploadBtn.addEventListener("click", (e) => {
-    inputElement.click();
-
-    // if (file) {
-    //   const blob = new Blob([file]);
-
-    //   await fetch(`${URL}/upload/picture`, {
-    //     method: "POST",
-    //     body: blob,
-    //     headers: {
-    //       "Content-Type": "application/octet-stream",
-    //     },
-    //   });
-    // }
+    picUpload.click();
   });
 
   formElement.addEventListener("submit", (e) => {
     e.preventDefault();
   });
 
-  inputElement.addEventListener("change", () => {
-    const file = inputElement.files[0];
+  picUpload.addEventListener("change", () => {
+    const file = picUpload.files[0];
 
     if (!file) return;
 
@@ -176,9 +172,11 @@ const updateMemorySlotCount = () => {
   const timelineMemoryNumberT = document.querySelectorAll(
     ".timeline-memory-number-t"
   );
-  let memorySlotCount = timelineMemorySlotsT.childElementCount;
+  const timelineMemoriesCountDivT = document.querySelector(
+    "#timeline-memories-count-div-t"
+  );
 
-  console.log(timelineMemoryNumberT);
+  let memorySlotCount = timelineMemorySlotsT.childElementCount;
 
   timelineMemoryNumberT.forEach((memoryNumber, index) => {
     memoryNumber.textContent = index + 1;
@@ -189,20 +187,123 @@ const updateMemorySlotCount = () => {
 
 const publishTimeline = async () => {
   try {
-    const memoryForms = document.querySelectorAll(".timeline-memory-form-t");
-    const slots = [];
+    const timelineCreationFormT = document.querySelector(
+      "#timeline-creation-form-t"
+    );
+    const timelineMemoryFormT = document.querySelectorAll(
+      ".timeline-memory-form-t"
+    );
+    const timelineCreationDialogT = document.querySelector(
+      "#timeline-creation-dialog-t"
+    );
 
-    memoryForms.forEach((form) => {
-      const formEntries = new FormData(form);
-      const data = Object.fromEntries(formEntries);
+    const timelineForm = new FormData(timelineCreationFormT);
+    const ownerID = localStorage.loggedUserID;
 
-      data.memory_picture_input_t = new Blob([data.memory_picture_input_t]);
+    timelineForm.append("timeline_owner_id", ownerID);
 
-      slots.push(data);
+    const response = await fetch(`${URL}/timelines/post-timeline`, {
+      method: "POST",
+      body: JSON.stringify(Object.fromEntries(timelineForm)),
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
 
-    console.log(slots);
+    if (!response.ok) {
+      confirmationPopUpMsg("Unable to publish timeline!");
+      return;
+    }
+
+    const timelineID = await response.json();
+    await updateTimelineMemories({
+      timelineID,
+      formElements: timelineMemoryFormT,
+    });
+
+    confirmationPopUpMsg("Timeline published!");
+    timelineCreationDialogT.close();
   } catch (err) {
     console.log(err);
   }
+};
+
+const updateTimelineMemories = async ({ timelineID, formElements }) => {
+  formElements.forEach(async (form) => {
+    const formData = new FormData(form);
+    const memoryForm = Object.fromEntries(formData);
+    const pictureBlob = new Blob([memoryForm.memory_picture_input_t]);
+
+    const memoryDescription = memoryForm.memory_description_textarea_t;
+
+    const pictureID = await uploadPicture(pictureBlob);
+
+    const memoryToAdd = new FormData();
+    memoryToAdd.append("memory_description", memoryDescription);
+    memoryToAdd.append("memory_picture_id", pictureID);
+    memoryToAdd.append("memory_timeline_id", timelineID);
+
+    await fetch(`${URL}/timelines/add-memory`, {
+      method: "POST",
+      body: JSON.stringify(Object.fromEntries(memoryToAdd)),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  });
+};
+
+const uploadPicture = async (pictureBlob) => {
+  const pictureUploadResponse = await fetch(`${URL}/upload/picture`, {
+    method: "POST",
+    body: pictureBlob,
+    headers: {
+      "Content-Type": "application/octet-stream",
+    },
+  });
+
+  return await pictureUploadResponse.json();
+};
+
+export const timelineCreationMemoriesSmoothScroll = () => {
+  const timelineMemorySlotsT = document.querySelector(
+    ".timeline-memory-slots-t"
+  );
+  const timelineMemorySlotT = document.querySelectorAll(
+    ".timeline-memory-slot-t"
+  );
+
+  let prevScrollPosition = timelineMemorySlotsT.scrollTop;
+
+  timelineMemorySlotsT.addEventListener("scroll", () => {
+    let slotHeight = parseInt(
+      getComputedStyle(timelineMemorySlotT[0]).height,
+      10
+    );
+    let slotPadding = parseInt(
+      getComputedStyle(timelineMemorySlotsT).paddingTop,
+      10
+    );
+
+    let scrollOffset = slotHeight + slotPadding;
+    let currentScrollPosition = timelineMemorySlotsT.scrollTop;
+
+    if (currentScrollPosition > prevScrollPosition) {
+      const nextSnapPosition =
+        Math.ceil(currentScrollPosition / scrollOffset) * scrollOffset;
+      timelineMemorySlotsT.scrollTo({
+        top: nextSnapPosition,
+        behavior: "smooth",
+      });
+    } else {
+      const prevSnapPosition =
+        Math.floor(currentScrollPosition / scrollOffset) * scrollOffset;
+      timelineMemorySlotsT.scrollTo({
+        top: prevSnapPosition,
+        behavior: "smooth",
+      });
+    }
+
+    prevScrollPosition = currentScrollPosition;
+  });
 };
