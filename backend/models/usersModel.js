@@ -18,20 +18,29 @@ const getProfilePicture = async () => {
   return data;
 };
 
-const data = async (email) => {
+const data = async (id) => {
   try {
-    let query = `SELECT user_id, picture_data, user_first_name, user_last_name from users join pictures on users.user_picture_id = pictures.picture_id`;
+    // let query = `SELECT user_id, picture_data, user_first_name, user_last_name from users join pictures on users.user_picture_id = pictures.picture_id`;
 
-    const params = [];
+    // const params = [];
 
-    if (email) {
-      query += " WHERE user_email = ?";
-      params.push(email);
-    }
+    // console.log(id)
 
-    const [userData] = await connection.execute(query, params);
+    // if (id) {
+    //   query += " WHERE user_id = ?";
+    //   params.push(id);
+    // }
 
-    console.log("loggedUserDataModel", userData);
+    // const [userData] = await connection.execute(query, params);
+
+    console.log("id", id);
+
+    const [userData] = await connection.execute(
+      `SELECT user_id, picture_data, user_first_name, user_last_name from users join pictures on users.user_picture_id = pictures.picture_id WHERE user_id = ?`,
+      [id]
+    );
+
+    console.log(userData);
 
     return userData[0];
   } catch (err) {
