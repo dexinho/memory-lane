@@ -29,14 +29,67 @@ const getTimelines = async (amount = "5") => {
       [amount]
     );
 
-    console.log(timelines)
-
     return timelines;
   } catch (err) {
     console.log(err);
   }
 };
 
+const postTimeline = async ({
+  timeline_owner_id,
+  timeline_title,
+  timeline_background_color,
+  timeline_font_color,
+  timeline_font_family,
+  timeline_is_public,
+}) => {
+  try {
+    const [result] = await connection.execute(
+      `INSERT INTO timelines(timeline_owner_id, timeline_title, timeline_background_color, timeline_font_color, timeline_font_family, timeline_is_public, timeline_picture_id, timeline_date_created, timeline_date_updated) 
+      values (?, ?, ?, ?, ?, ?, ?, CURRENT_DATE(), CURRENT_DATE())`,
+      [
+        timeline_owner_id,
+        timeline_title,
+        timeline_background_color,
+        timeline_font_color,
+        timeline_font_family,
+        timeline_is_public === "on",
+        1,
+      ]
+    );
+
+    return result.insertId;
+  } catch (err) {
+    console.log(err);
+    if (err.sqlState === "23000") return "23000";
+
+    return;
+  }
+};
+
+const addMemory = async ({
+  memory_timeline_id,
+  memory_description,
+  memory_picture_id,
+}) => {
+  try {
+    await connection.execute(
+      `INSERT INTO memories(memory_date, memory_picture_id, memory_timeline_id, memory_description) 
+      VALUES(CURRENT_DATE(), ?, ?, ?)`,
+      [memory_picture_id, memory_timeline_id, memory_description]
+    );
+
+    return "00000";
+  } catch (err) {
+    console.log(err);
+    if (err.sqlState === "23000") return "23000";
+
+    return;
+  }
+};
+
 timelinesModel.getTimelines = getTimelines;
+timelinesModel.postTimeline = postTimeline;
+timelinesModel.addMemory = addMemory;
 
 module.exports = timelinesModel;
