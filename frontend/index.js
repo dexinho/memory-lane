@@ -10,6 +10,8 @@ if (submitLoginBtn) {
     e.preventDefault();
     const formEntries = new FormData(loginForm);
 
+    console.log(JSON.stringify(Object.fromEntries(formEntries)));
+
     try {
       const response = await fetch(`${URL}/authentication/validate`, {
         method: "POST",
@@ -20,10 +22,10 @@ if (submitLoginBtn) {
       });
 
       if (response.ok) {
-        localStorage.setItem(
-          "loggedUserEmail",
-          JSON.stringify(formEntries.get("email_input"))
-        );
+        const userID  = await response.json();
+
+        localStorage.loggedUserID = userID;
+
         const a = document.createElement("a");
         a.href = "./src/utility/html/timelines.html";
         a.click();
