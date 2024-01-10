@@ -53,10 +53,9 @@ CREATE TABLE timeline_visits (
 CREATE TABLE memories (
     memory_id INT PRIMARY KEY AUTO_INCREMENT,
     memory_date DATE,
-    memory_picture_name VARCHAR(30),
     memory_picture_id INT,
     memory_timeline_id INT,
-    description TEXT,
+    memory_description TEXT,
     FOREIGN KEY (memory_timeline_id)
         REFERENCES timelines (timeline_id)
         ON DELETE CASCADE,
@@ -84,7 +83,7 @@ DELIMITER ;
 CREATE 
     TRIGGER  update_timeline_date
  AFTER INSERT ON memories FOR EACH ROW 
-    UPDATE timeline SET timeline_date_updated = CURRENT_DATE() WHERE
+    UPDATE timelines SET timeline_date_updated = CURRENT_DATE() WHERE
         timeline_id = NEW.memory_timeline_id;
 
 CREATE 
