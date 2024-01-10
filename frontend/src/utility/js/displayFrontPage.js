@@ -14,11 +14,10 @@ import { getPicURL } from "./getPicURL.js";
 import { URL } from "./globalVar.js";
 import { handleUserSearch } from "./findUser.js";
 import { handleTimelineCreation } from "./createTimeline.js";
-import { scroll } from "./timelines.js";
-
+import { timelineCreationMemoriesSmoothScroll } from "./createTimeline.js";
 const displayFrontPage = async () => {
   try {
-    const loggedUserEmail = JSON.parse(localStorage.getItem("loggedUserEmail"));
+    const loggedUserID = localStorage.loggedUserID;
     const userProfileImgT = document.createElement("img");
     userProfileImgT.id = "user-profile-img-t";
 
@@ -30,9 +29,8 @@ const displayFrontPage = async () => {
 
     if (getTimelines.ok) {
       const getLoggedUserData = await fetch(
-        `${URL}/users/data?email=${loggedUserEmail}`
+        `${URL}/users/data?id=${loggedUserID}`
       );
-      console.log(getLoggedUserData.headers);
 
       const timelines = await getTimelines.json();
       const loggedUserData = await getLoggedUserData.json();
@@ -224,6 +222,8 @@ export const displayTimelines = async (timelines) => {
 };
 
 logOutBtnT.addEventListener("click", () => {
+  localStorage.loggedUserID = "";
+
   const a = document.createElement("a");
   a.href = "../../../index.html";
   a.click();
@@ -231,5 +231,5 @@ logOutBtnT.addEventListener("click", () => {
 
 displayFrontPage();
 handleUserSearch();
-handleTimelineCreation()
-scroll()
+handleTimelineCreation();
+timelineCreationMemoriesSmoothScroll();
