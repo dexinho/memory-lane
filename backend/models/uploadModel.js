@@ -1,12 +1,17 @@
-const pool = require("./connectionPool");
+const connection = require("./connectionPool");
 
 const uploadModel = {};
 
 const picture = async (pictureData) => {
   try {
-    await pool.execute(`INSERT INTO pictures(picture_data) VALUE(?)`, [
-      pictureData,
-    ]);
+    const [result] = await connection.execute(
+      `INSERT INTO pictures(picture_data) VALUE(?)`,
+      [pictureData]
+    );
+
+    console.log('result.insertId', result.insertId)
+
+    return result.insertId;
   } catch (err) {
     console.log(err);
   }
