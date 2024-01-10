@@ -19,6 +19,8 @@
       <i class="fa-solid fa-check"></i>
       Success!
     </div>
+    <dialog id="confirmation-pop-up-t">
+    </dialog>
     <dialog id="timeline-creation-dialog-t">
       <div>
         <div id="timeline-creation-header-t">
@@ -31,28 +33,28 @@
             <form action="POST" id="timeline-creation-form-t">
               <div id="timeline-title-t">
                 <label for="timeline-title-input-t">Title: </label>
-                <input type="text" id="timeline-title-input-t" name="timeline_title_input_t">
+                <input type="text" id="timeline-title-input-t" name="timeline_title">
               </div>
               <div id="timeline-creation-settings-title-t">Settings</div>
               <div id="timeline-creation-settings-t">
                 <div>
-                  <label for="timeline-font-style-input-t">Font Style: </label>
-                  <input type="text" class="timeline-settings-input-t" id="timeline-font-style-input-t"
-                    placeholder="sans-serif">
+                  <label for="timeline-font-family-input-t">Font Family: </label>
+                  <input type="text" class="timeline-settings-input-t" id="timeline-font-family-input-t"
+                    name="timeline_font_family" placeholder="sans-serif">
                 </div>
                 <div>
                   <label for="timeline-font-color-input-t">Font Color: </label>
                   <input type="text" class="timeline-settings-input-t" id="timeline-font-color-input-t"
-                    placeholder="black">
+                    name="timeline_font_color" placeholder="black">
                 </div>
                 <div>
                   <label for="timeline-background-color-input-t">Background Color: </label>
                   <input type="text" class="timeline-settings-input-t" id="timeline-background-color-input-t"
-                    placeholder="black">
+                    name="timeline_background_color" placeholder="black">
                 </div>
                 <div id="timeline-is-public-div-t">
                   <label for="timeline-is-public-input-t">Public: </label>
-                  <input type="checkbox" id="timeline-is-public-input-t" checked>
+                  <input type="checkbox" id="timeline-is-public-input-t" name="timeline_is_public" checked>
                 </div>
               </div>
             </form>
