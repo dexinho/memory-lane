@@ -9,10 +9,10 @@ const usersRouter = require("./routers/usersRouter");
 const PORT = 3000;
 const host = "localhost";
 
+app.use(cors());
 app.use(express.raw({ type: "application/octet-stream", limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors());
 
 app.use("/authentication", authenticationRouter);
 app.use("/timelines", timelinesRouter);
