@@ -11,7 +11,7 @@ const validate = async ({ email_input, password_input }) => {
     [email_input, hash]
   );
 
-  if (data.length > 0) return data[0];
+  if (data.length > 0) return data[0].user_id;
 };
 
 const register = async ({
@@ -30,6 +30,7 @@ const register = async ({
 
     return "00000";
   } catch (err) {
+    console.log(err);
     if (err.sqlState === "23000") return "23000";
     else return;
   }
