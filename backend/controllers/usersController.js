@@ -7,8 +7,6 @@ const getProfilePicture = async (req, res) => {
     const pictures = await usersModel.getProfilePicture();
     const finalData = {};
 
-    console.log("pictures", pictures);
-
     pictures.forEach((picture) => {
       finalData[picture.user_id] = picture.user_picture_data;
     });
@@ -22,9 +20,8 @@ const getProfilePicture = async (req, res) => {
 
 const data = async (req, res) => {
   try {
-    const email = req.query?.email;
-    const data = await usersModel.data(email);
-    console.log("loggedUserDataController", data);
+    const id = req.query?.id;
+    const data = await usersModel.data(id);
     res.status(200).json(data);
   } catch (err) {
     console.log(err);
