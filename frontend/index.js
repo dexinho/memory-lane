@@ -3,7 +3,7 @@ import {
   loginPopUpMsgT,
   loginForm,
 } from "./src/utility/js/querySelectors.js";
-import { URL } from "./src/utility/js/globalVar.js";
+import { URL, urlNavigation } from "./src/utility/js/URL.js";
 
 if (submitLoginBtn) {
   submitLoginBtn.addEventListener("click", async (e) => {
@@ -22,13 +22,13 @@ if (submitLoginBtn) {
       });
 
       if (response.ok) {
-        const userID  = await response.json();
+        const userID = await response.json();
 
         localStorage.loggedUserID = userID;
+        localStorage.justLoggedIn = true;
 
-        const a = document.createElement("a");
-        a.href = "./src/utility/html/timelines.html";
-        a.click();
+        const url = "./src/utility/html/timelines.html";
+        urlNavigation(url);
       } else if (response.status === 400)
         displayPopUpMsg("Incorrect Email or Password!");
       else displayPopUpMsg("Server error");
