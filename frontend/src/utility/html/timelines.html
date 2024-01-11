@@ -14,11 +14,13 @@
 </head>
 
 <body>
-  <div id="container-t">
-    <div id="login-pop-up-msg-t">
+  <dialog id="login-pop-up-msg-t">
+    <div>
       <i class="fa-solid fa-check"></i>
       Success!
     </div>
+  </dialog>
+  <div id="container-t">
     <dialog id="confirmation-pop-up-t">
     </dialog>
     <dialog id="timeline-creation-dialog-t">
@@ -134,16 +136,22 @@
                 </div> -->
               </div>
             </div>
-            <div>
-              <button id="create-new-timeline-btn-t" class="cursor-pointer">CREATE NEW TIMELINE</button>
-            </div>
           </div>
         </div>
         <div id="log-out-div-t">
           <button id="log-out-btn-t" class="cursor-pointer">Log out</button>
         </div>
+        <div id="home-create-holder-t">
+          <div id="home-btn-holder-t">
+            <i class="fa-solid fa-house-crack" id="home-btn-t"></i>
+          </div>
+
+          <button id="create-new-timeline-btn-t" class="cursor-pointer">CREATE NEW TIMELINE</button>
+          <div></div>
+        </div>
       </div>
-      <div id="timeline-slots-t">
+
+      <!-- <div id="timeline-slots-t"> -->
 
         <!-- <div class="timeline-slot-t">
           <div class="timeline-owner-views-t">
@@ -202,7 +210,7 @@
           </div>
           <div class="timeline-slot-view-count-t"></div>
         </div> -->
-      </div>
+      <!-- </div> -->
     </div>
   </div>
 </body>
