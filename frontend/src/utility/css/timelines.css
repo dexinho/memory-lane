@@ -65,7 +65,7 @@ body {
   width: 1200px;
   display: none;
   /* display: grid; */
-  grid-template-columns: 0.3fr 1fr 0.2fr;
+  grid-template-columns: 0.4fr 1fr 0.4fr;
   gap: 1rem;
   padding: 1rem;
   background-color: var(--secondary-color);
@@ -85,21 +85,21 @@ body {
 
 #search-create-holder-t>* {
   position: relative;
-  width: 70%;
+  width: 100%;
+}
+
+#profile-header-t {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 #user-profile-pic-holder-t {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
-}
-
-#profile-header-t {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  flex-wrap: wrap;
   gap: 1rem;
 }
 
@@ -140,6 +140,30 @@ body {
   justify-content: center;
   flex-wrap: wrap;
   gap: 1rem;
+}
+
+#home-create-holder-t {
+  display: grid;
+  grid-template-columns: 0.4fr 1fr 0.4fr;
+  grid-column: 1/4;
+  padding: 0 1rem;
+}
+
+#home-btn-holder-t {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  translate: -0.6rem;
+}
+
+#home-btn-t {
+  font-size: 1.6rem;
+  color: var(--tertiary-color);
+}
+
+#home-btn-t:hover {
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.6);
 }
 
 .timeline-slot-t {
@@ -198,7 +222,7 @@ body {
 }
 
 .timeline-picture-div-t>img:hover {
-  scale: 1.01;
+  outline: 2px solid;
 }
 
 .created-t,
@@ -245,11 +269,16 @@ body {
   margin: auto;
 }
 
-/* #log-out-div-t {
+#create-new-timeline-btn-t:hover {
+  background-color: rgba(0, 0, 0, 0.6);
+  color: whitesmoke;
+}
+
+#log-out-div-t {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-} */
+}
 
 #log-out-btn-t {
   color: black;
@@ -272,12 +301,24 @@ body {
   background-size: cover;
 }
 
+#current-timeline-name-t {
+  font-weight: bold;
+}
+
 .round-pic {
   overflow: hidden;
   border: 1px solid transparent;
   border-radius: 100%;
   width: 40px;
   height: 40px;
+}
+
+.round-pic-b {
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: 100%;
+  width: 80px;
+  height: 80px;
 }
 
 button:hover,
@@ -289,15 +330,10 @@ select:hover {
 
 #login-pop-up-msg-t {
   position: absolute;
-  display: none;
-  /* display: flex; */
   width: 250px;
   height: 250px;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
   gap: 1rem;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.5);
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -308,6 +344,12 @@ select:hover {
 
 #login-pop-up-msg-t>* {
   width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .fa-check {
@@ -321,6 +363,7 @@ select:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 0 3rem;
 }
 
 #current-timeline-holder-t {
@@ -329,12 +372,6 @@ select:hover {
   justify-content: center;
   gap: 1rem;
 }
-
-#current-timeline-pic-t {
-  width: 100px;
-  height: 60px;
-}
-
 
 #sort-timelines-select-t {
   background-color: blueviolet;
@@ -346,8 +383,7 @@ select:hover {
 #search-window-holder-t {
   display: none;
   position: absolute;
-  top: 1.5rem;
-  padding: 1rem;
+  top: 2.2rem;
   z-index: 3;
 }
 
@@ -670,4 +706,77 @@ select:hover {
 
 .timeline-present-picture-t {
   height: 500px !important;
+}
+
+#filter-holder-t {
+  position: relative;
+}
+
+#filter-text-icon-t {
+  position: relative;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  border-radius: 1rem;
+}
+
+#filter-br-t  {
+  grid-column: 1/3;
+  width: 100%;
+  height: 1px;
+  background-color: black;
+}
+
+.filter-icon {
+  font-size: 1.4rem;
+}
+
+#filter-text-t {
+  font-size: 1.2rem;
+}
+
+.hover-pointer-rgba08:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.hover-pointer-rgba03:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+#filter-dropdown-t {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 4rem;
+  background-color: rgb(70, 58, 58);
+  z-index: 10;
+  border-radius: 1rem;
+  grid-template-columns: 80px 80px;
+  padding: 1rem;
+  column-gap: 2rem;
+  row-gap: 0.5rem;
+}
+
+.filter-dropdown-display-toggle-t {
+  display: grid !important; 
+}
+
+.pct {
+  text-align: center;
+  padding: 0.5rem;
+  color: rgb(182, 171, 171);
+}
+
+.filter-option-toggle-t {
+  background-color: rgba(0, 0, 0, 0.3);
+  font-weight: bold;
+}
+
+.color-white {
+  color: whitesmoke;
 }
