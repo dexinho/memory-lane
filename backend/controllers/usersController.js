@@ -4,24 +4,23 @@ usersController = {};
 
 const getProfilePicture = async (req, res) => {
   try {
-    const pictures = await usersModel.getProfilePicture();
-    const finalData = {};
+    const userID = req.query?.id;
 
-    pictures.forEach((picture) => {
-      finalData[picture.user_id] = picture.user_picture_data;
-    });
+    if (!userID) throw new Error("No id provided!");
 
-    res.status(200).json(finalData);
+    const [picture] = await usersModel.getProfilePicture(userID);
+
+    res.status(200).json(picture);
   } catch (err) {
     console.log(err);
     res.sendStatus(500);
   }
 };
 
-const data = async (req, res) => {
+const getUserData = async (req, res) => {
   try {
-    const id = req.query?.id;
-    const data = await usersModel.data(id);
+    const { id } = req.query;
+    const data = await usersModel.getUserData(id);
     res.status(200).json(data);
   } catch (err) {
     console.log(err);
@@ -31,7 +30,7 @@ const data = async (req, res) => {
 
 const search = async (req, res) => {
   try {
-    const query = req.query?.q;
+    const { query } = req.query;
 
     const userData = await usersModel.search(query);
     res.status(200).json(userData);
@@ -42,7 +41,7 @@ const search = async (req, res) => {
 };
 
 usersController.getProfilePicture = getProfilePicture;
-usersController.data = data;
+usersController.getUserData = getUserData;
 usersController.search = search;
 
 module.exports = usersController;
