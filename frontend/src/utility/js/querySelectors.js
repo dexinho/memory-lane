@@ -7,6 +7,7 @@ export const timelineUserProfileT = document.querySelector("#timeline-user-profi
 export const timelinePicDivT = document.querySelectorAll(".timeline-picture-div-t");
 export const userProfilePicT = document.querySelector("#user-profile-pic-div-t");
 export const registrationPopUpMsgR = document.querySelector('#registration-pop-up-msg-r')
+export const containerT = document.querySelector('#container-t')
 
 // Buttons
 export const submitLoginBtn = document.querySelector("#submit-login-btn");
