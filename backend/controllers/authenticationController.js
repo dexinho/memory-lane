@@ -14,7 +14,6 @@ const validate = async (req, res) => {
 };
 
 const register = async (req, res) => {
-  console.log(req.body);
   try {
     const sqlState = await authenticationModel.register(req.body);
 
