@@ -2,31 +2,49 @@ const connection = require("./connectionPool");
 
 timelinesModel = {};
 
-const getTimelines = async (amount = "5") => {
+const getTimelines = async ({
+  offset,
+  limit,
+  id = null,
+  owner = null,
+  sortOrder,
+  sortChoice,
+}) => {
+  console.log(offset, limit, id, owner, sortChoice, sortOrder);
+
+  if (sortChoice === "updated") sortChoice = "timeline_date_updated"
+  else if (sortChoice === "views") sortChoice = "timeline_view_count"
+
   try {
     const [timelines] = await connection.execute(
       `SELECT
-      t.timeline_id,
-      t.timeline_title,
-      u.user_first_name,
-      u.user_last_name,
-      t.timeline_background_color,
-      t.timeline_font_color,
-      t.timeline_font_family,
-      t.timeline_is_public,
-      t.timeline_owner_id,
-      t.timeline_view_count,
-      t.timeline_date_created,
-      t.timeline_date_updated,
-      tp.picture_data AS timeline_picture_data
-  FROM
-      timelines t
-  JOIN
-      pictures tp ON t.timeline_picture_id = tp.picture_id
-  JOIN users u ON u.user_id = t.timeline_owner_id
-  ORDER BY t.timeline_id desc
-      LIMIT ?`,
-      [amount]
+          t.timeline_id,
+          t.timeline_title,
+          u.user_first_name,
+          u.user_last_name,
+          t.timeline_background_color,
+          t.timeline_font_color,
+          t.timeline_font_family,
+          t.timeline_is_public,
+          t.timeline_owner_id,
+          t.timeline_view_count,
+          t.timeline_date_created,
+          t.timeline_date_updated,
+          tp.picture_data AS timeline_picture_data
+      FROM
+          timelines t
+      JOIN
+          pictures tp ON t.timeline_picture_id = tp.picture_id
+      JOIN users u ON u.user_id = t.timeline_owner_id
+      WHERE 
+          (t.timeline_owner_id = ? AND ? IS NOT NULL)
+          OR 
+          (t.timeline_is_public = 1 AND ? IS NULL)
+          OR 
+          (t.timeline_owner_id = ? AND ? IS NOT NULL AND t.timeline_is_public = 1)
+      ORDER BY ${sortChoice} ${sortOrder}
+      LIMIT ?, ?`,
+      [id, owner, id, id, id, offset, limit]
     );
 
     return timelines;
