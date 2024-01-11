@@ -4,8 +4,18 @@ timelinesController = {};
 
 const getTimelines = async (req, res) => {
   try {
-    const amount = req.query?.amount;
-    const timelines = await timelinesModel.getTimelines(amount);
+    let { offset, limit, id, owner, "sort order": sortOrder, "sort choice": sortChoice } = req.query;
+
+    if (!offset || !limit) [offset, limit] = [0, 5];
+
+    const timelines = await timelinesModel.getTimelines({
+      offset,
+      limit,
+      id,
+      owner,
+      sortOrder,
+      sortChoice
+    });
 
     res.status(200).json(timelines);
   } catch (err) {
@@ -15,7 +25,6 @@ const getTimelines = async (req, res) => {
 };
 
 const postTimeline = async (req, res) => {
-  console.log(req.body);
   try {
     const timelineID = await timelinesModel.postTimeline(req.body);
 
