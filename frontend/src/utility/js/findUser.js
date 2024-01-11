@@ -1,4 +1,4 @@
-import { URL } from "./globalVar.js";
+import { URL, urlNavigation } from "./URL.js";
 import { getPicURL } from "./getPicURL.js";
 
 const searchWindowHolderT = document.querySelector("#search-window-holder-t");
@@ -7,6 +7,7 @@ const refreshSearchBarT = document.querySelector("#refresh-search-bar-t");
 export const handleUserSearch = () => {
   const searchUserInputT = document.querySelector("#search-user-input-t");
   let isFetching = false;
+  let searchTimeoutID = 0;
 
   refreshSearchBarT.addEventListener("click", () => {
     searchWindowHolderT.style.display = "none";
@@ -16,35 +17,41 @@ export const handleUserSearch = () => {
   });
 
   searchUserInputT.addEventListener("input", async (e) => {
-    try {
-      if (isFetching || e.data === " ") return;
+    if (isFetching) return;
 
-      const searchQuery = searchUserInputT.value.replace(/\s+/g, " ").trim();
+    const searchQuery = searchUserInputT.value.replace(/\s+/g, " ").trim();
 
-      if (!searchQuery) {
-        searchWindowHolderT.style.display = "none";
-        refreshSearchBarT.style.display = "none";
+    clearTimeout(searchTimeoutID);
 
-        return;
-      }
+    if (!searchQuery) {
+      searchWindowHolderT.style.display = "none";
+      refreshSearchBarT.style.display = "none";
 
-      isFetching = true;
-
-      refreshSearchBarT.style.display = "block";
-
-      const response = await fetch(`${URL}/users/search?q=${searchQuery}`);
-
-      if (response.ok) {
-        const userData = await response.json();
-
-        await createSearchSlots(userData);
-      }
-    } catch (err) {
-      console.log(err);
-    } finally {
-      console.log("finally");
-      isFetching = false;
+      return;
     }
+
+    const userSearch = async () => {
+      try {
+        isFetching = true;
+        refreshSearchBarT.style.display = "block";
+
+        const response = await fetch(
+          `${URL}/users/search?query=${searchQuery}`
+        );
+
+        if (response.ok) {
+          const userData = await response.json();
+
+          await createSearchSlots(userData);
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        isFetching = false;
+      }
+    };
+
+    searchTimeoutID = setTimeout(userSearch, 500);
   });
 };
 
@@ -85,9 +92,10 @@ const createSearchSlots = async (userData) => {
 
         searchWindowSlotPictureT.append(img);
 
-        // searchWindowSlotT.addEventListener('click', () => {
-        //   const id =
-        // })
+        const url = `../html/timelines.html?user-id=${user.user_id}`;
+
+        searchWindowSlotT.addEventListener("click", () => urlNavigation(url));
+        
       } catch (err) {
         console.log(err);
       }
