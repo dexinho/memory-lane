@@ -1,8 +1,8 @@
-export const getPicURL = (picture) => {
+export const getPicURL = (pictureData) => {
   return new Promise((res, rej) => {
-    if (!picture) "../../assets/example_pictures/robot.png";
-
-    const uint8 = new Uint8Array(picture);
+    if (!pictureData) "../../assets/example_pictures/robot.png";
+    
+    const uint8 = new Uint8Array(pictureData);
     const blob = new Blob([uint8], { type: "image/jpeg" });
 
     const reader = new FileReader();
