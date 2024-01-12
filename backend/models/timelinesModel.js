@@ -12,8 +12,8 @@ const getTimelines = async ({
 }) => {
   console.log(offset, limit, id, owner, sortChoice, sortOrder);
 
-  if (sortChoice === "updated") sortChoice = "timeline_date_updated"
-  else if (sortChoice === "views") sortChoice = "timeline_view_count"
+  if (sortChoice === "updated") sortChoice = "timeline_date_updated";
+  else if (sortChoice === "views") sortChoice = "timeline_view_count";
 
   try {
     const [timelines] = await connection.execute(
@@ -85,7 +85,7 @@ const postTimeline = async ({
   }
 };
 
-const addMemory = async ({
+const postMemory = async ({
   memory_timeline_id,
   memory_description,
   memory_picture_id,
@@ -106,8 +106,26 @@ const addMemory = async ({
   }
 };
 
+const getMemories = async (timelineID) => {
+  try {
+    const [memories] = await connection.execute(
+      `SELECT memory_id, memory_date, picture_data, memory_description 
+      FROM memories JOIN pictures ON memories.memory_picture_id = pictures.picture_id 
+      WHERE memory_timeline_id = ?`,
+      [timelineID]
+    );
+
+    return memories;
+  } catch (err) {
+    console.log(err);
+
+    return;
+  }
+};
+
 timelinesModel.getTimelines = getTimelines;
 timelinesModel.postTimeline = postTimeline;
-timelinesModel.addMemory = addMemory;
+timelinesModel.postMemory = postMemory;
+timelinesModel.getMemories = getMemories;
 
 module.exports = timelinesModel;
