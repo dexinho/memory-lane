@@ -10,18 +10,24 @@ import {
 import { getPicURL } from "./getPicURL.js";
 import { URL, urlNavigation } from "./URL.js";
 import { handleUserSearch } from "./findUser.js";
-import { createNewTimeline as handleTimelineCreation } from "./timelines.js";
-import { timelineCreationMemoriesSmoothScroll } from "./timelines.js";
+import {
+  createNewTimeline as handleTimelineCreation,
+  displayTimelines,
+  makeTimelineOpeningButtonsFunctional,
+} from "./timelines.js";
+import {
+  timelineCreationMemoriesSmoothScroll,
+  timelineSlotsT,
+} from "./timelines.js";
 
 const timelineQueryOptions = {
   timelineShowcaseOffset: 0,
   timelineShowcaseLimit: 3,
   sortChoice: "updated",
-  sortOrder: "ASC",
+  sortOrder: "DESC",
 };
 
 let areTimelinesLeftToDisplay = true;
-const timelineSlotsT = document.createElement("div");
 
 const displayLoggedUserHeader = async () => {
   try {
@@ -161,7 +167,7 @@ export const displayCurrentPageLogoAndName = async ({ picture, name }) => {
 };
 
 const noTimelinesToShow = () => {
-  const sortTimelines = document.querySelector("#sort-timelines-select-t");
+  const filterHolder = document.querySelector("#filter-holder-t");
 
   const timelineSlotT = document.createElement("div");
   const timelineDescriptionDivT = document.createElement("div");
@@ -184,142 +190,12 @@ const noTimelinesToShow = () => {
 
   timelineSlotT.style.border = "0";
   timelineSlotT.style.padding = "3rem";
-  sortTimelines.style.visibility = "hidden";
-};
-
-export const displayTimelines = async ({ timelines, toAppend = true }) => {
-  if (timelines.length === 0) noTimelinesToShow();
-
-  try {
-    await Promise.all(
-      timelines.map(async (timeline) => {
-        const timelineSlotT = document.createElement("div");
-        const timelineOwnerViewsT = document.createElement("div");
-        const ownerProfileNameT = document.createElement("div");
-        const roundPic = document.createElement("div");
-        const timelineOwnerName = document.createElement("div");
-        const viewsT = document.createElement("div");
-        const timelineDescriptionDivT = document.createElement("div");
-        const timelineDescriptionT = document.createElement("div");
-        const timelinePictureDivT = document.createElement("div");
-        const createdUpdatedT = document.createElement("div");
-        const createdT = document.createElement("div");
-        const createdText = document.createElement("div");
-        const createdDate = document.createElement("div");
-        const updatedText = document.createElement("div");
-        const updatedDate = document.createElement("div");
-        const updatedT = document.createElement("div");
-
-        const timelineOwnerProfilePictureT = document.createElement("img");
-        const timelinePresentPictureT = document.createElement("img");
-        const logOutBtn = document.createElement("button");
-
-        timelineSlotT.className = "timeline-slot-t";
-        timelineOwnerViewsT.className = "timeline-owner-views-t";
-        ownerProfileNameT.className = "owner-profile-name-t";
-        roundPic.className = "round-pic";
-        timelineOwnerName.className =
-          "timeline-owner-name cursor-pointer hover-name";
-        viewsT.className = "views-t";
-        timelineSlotT.className = "timeline-slot-t";
-        timelineDescriptionDivT.className = "timeline-description-div-t";
-        timelineDescriptionT.className = "timeline-description-t";
-        timelinePictureDivT.className = "timeline-picture-div-t cursor-pointer";
-        createdUpdatedT.className = "created-updated-t";
-        createdT.className = "created-t";
-        createdText.className = "created-text";
-        createdDate.className = "created-date";
-        updatedT.className = "updated-t";
-        timelineOwnerProfilePictureT.className =
-          "timeline-owner-profile-picture-t";
-        logOutBtn.className = "log-out-btn";
-        timelinePresentPictureT.className = "timeline-present-picture-t";
-
-        timelinePresentPictureT.id = `timeline-id-${timeline.timeline_id}`;
-
-        timelineOwnerName.textContent = `${timeline.user_first_name} ${timeline.user_last_name}`;
-        viewsT.textContent = `Views: ${timeline.timeline_view_count}`;
-        timelineDescriptionT.textContent = timeline.timeline_title;
-
-        createdText.textContent = "Created";
-        updatedText.textContent = "Updated";
-        createdDate.textContent = new Date(
-          timeline.timeline_date_created
-        ).toLocaleDateString("en-bs");
-        updatedDate.textContent = new Date(
-          timeline.timeline_date_updated
-        ).toLocaleDateString("en-bs");
-
-        timelineDescriptionT.style.fontFamily = timeline.timeline_font_family;
-        timelineDescriptionT.style.color = timeline.timeline_font_color;
-        timelineSlotT.style.backgroundColor =
-          timeline.timeline_background_color;
-
-        if (toAppend) timelineSlotsT.append(timelineSlotT);
-        else timelineSlotsT.prepend(timelineSlotT);
-
-        ownerProfileNameT.append(roundPic);
-        ownerProfileNameT.append(timelineOwnerName);
-
-        timelineOwnerViewsT.append(ownerProfileNameT);
-        timelineOwnerViewsT.append(viewsT);
-
-        timelineDescriptionDivT.append(timelineDescriptionT);
-
-        timelinePictureDivT.append(timelinePresentPictureT);
-
-        createdT.append(createdText);
-        createdT.append(createdDate);
-        updatedT.append(updatedText);
-        updatedT.append(updatedDate);
-
-        createdUpdatedT.append(createdT);
-        createdUpdatedT.append(updatedT);
-
-        timelineSlotT.append(timelineOwnerViewsT);
-        timelineSlotT.append(timelineDescriptionDivT);
-        timelineSlotT.append(timelinePictureDivT);
-        timelineSlotT.append(createdUpdatedT);
-
-        const getUserPictureResponse = await fetch(
-          `${URL}/users/get-profile-picture?id=${timeline.timeline_owner_id}`
-        );
-
-        if (!getUserPictureResponse.ok) {
-          console.error(
-            `Error fetching profile picture for user: ${timeline.user_first_name} ${timeline.user_last_name}:`,
-            getUserPictureResponse.status
-          );
-          return;
-        }
-
-        const userPicture = await getUserPictureResponse.json();
-
-        timelineOwnerProfilePictureT.src = await getPicURL(
-          userPicture.user_picture_data.data
-        );
-
-        timelinePresentPictureT.src = await getPicURL(
-          timeline.timeline_picture_data.data
-        );
-
-        timelineOwnerName.addEventListener("click", () => {
-          const url = `../html/timelines.html?user-id=${timeline.timeline_owner_id}`;
-          urlNavigation(url);
-        });
-
-        roundPic.append(timelineOwnerProfilePictureT);
-      })
-    );
-  } catch (err) {
-    console.log("Error displaying timelines", err);
-  }
+  filterHolder.style.visibility = "hidden";
 };
 
 const handleUserScroll = () => {
   let areTimelinesLoading = false;
   window.addEventListener("scroll", async () => {
-    console.log(areTimelinesLeftToDisplay)
     if (areTimelinesLoading || !areTimelinesLeftToDisplay) return;
 
     try {
@@ -407,7 +283,7 @@ const getTimelines = async (userID) => {
     let query = "";
 
     if (userID) {
-      query = `${URL}/timelines/get-timelines?id=${userID}&offset=${timelineQueryOptions.timelineShowcaseOffset}&limit=${timelineQueryOptions.timelineShowcaseLimit}&sort%20choice${timelineQueryOptions.sortChoice}&sort%20order=${timelineQueryOptions.sortOrder}`;
+      query = `${URL}/timelines/get-timelines?id=${userID}&offset=${timelineQueryOptions.timelineShowcaseOffset}&limit=${timelineQueryOptions.timelineShowcaseLimit}&sort%20choice=${timelineQueryOptions.sortChoice}&sort%20order=${timelineQueryOptions.sortOrder}`;
     } else {
       query = `${URL}/timelines/get-timelines?offset=${timelineQueryOptions.timelineShowcaseOffset}&limit=${timelineQueryOptions.timelineShowcaseLimit}&sort%20choice=${timelineQueryOptions.sortChoice}&sort%20order=${timelineQueryOptions.sortOrder}`;
 
@@ -470,10 +346,10 @@ const sortTimelineByFilterOptions = async () => {
   const filterOptionToggleT = document.querySelector(".filter-option-toggle-t");
 
   if (filterOptionToggleT.textContent === "New") {
-    timelineQueryOptions.sortOrder = "ASC";
+    timelineQueryOptions.sortOrder = "DESC";
     timelineQueryOptions.sortChoice = "updated";
   } else if (filterOptionToggleT.textContent === "Old") {
-    timelineQueryOptions.sortOrder = "DESC";
+    timelineQueryOptions.sortOrder = "ASC";
     timelineQueryOptions.sortChoice = "updated";
   } else if (filterOptionToggleT.textContent === "High") {
     timelineQueryOptions.sortOrder = "DESC";
@@ -492,8 +368,6 @@ const sortTimelineByFilterOptions = async () => {
     const timelineSlotsT = document.querySelector("#timeline-slots-t");
     timelineSlotsT.innerHTML = "";
 
-    console.log(timelines);
-
     displayTimelines({ timelines });
   } catch (err) {
     console.log(err);
@@ -506,3 +380,4 @@ handleTimelineCreation();
 handleUserScroll();
 handleHomePageBtn();
 timelineCreationMemoriesSmoothScroll();
+makeTimelineOpeningButtonsFunctional();
