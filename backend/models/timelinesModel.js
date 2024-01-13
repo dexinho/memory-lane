@@ -109,8 +109,9 @@ const postMemory = async ({
 const getMemories = async (timelineID) => {
   try {
     const [memories] = await connection.execute(
-      `SELECT memory_id, memory_date, picture_data, memory_description 
+      `SELECT memory_id, timeline_owner_id, memory_date, picture_data, memory_description 
       FROM memories JOIN pictures ON memories.memory_picture_id = pictures.picture_id 
+      JOIN timelines on timelines.timeline_id = memories.memory_timeline_id
       WHERE memory_timeline_id = ?`,
       [timelineID]
     );
