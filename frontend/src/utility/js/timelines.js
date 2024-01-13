@@ -1,5 +1,6 @@
 import { URL } from "./URL.js";
 import { getPicURL } from "./getPicURL.js";
+import { urlNavigation } from "./URL.js";
 
 export const timelineSlotsT = document.createElement("div");
 
@@ -500,6 +501,43 @@ export const timelineCreationMemoriesSmoothScroll = () => {
   });
 };
 
+const handleTimelineDeletion = (openedTimelineDialog) => {
+  const timelineDeleteTimelineT = document.querySelector(
+    "#timeline-delete-timeline-t"
+  );
+  const timelineAreYouSureHolderT = document.querySelector(
+    "#timeline-are-you-sure-holder-t"
+  );
+  const timelineDeletionDecisionBtnsT = document.querySelectorAll(
+    ".timeline-deletion-decision-btns-t"
+  );
+
+  const handleDeletionDecision = (event) => {
+    if (event.target.textContent === "Yes") {
+      openedTimelineDialog.close();
+      console.log("yes");
+    } else if (event.target.textContent === "No") console.log("no");
+
+    timelineAreYouSureHolderT.style.display = "none";
+
+    timelineDeletionDecisionBtnsT.forEach((decisionBtn) => {
+      decisionBtn.removeEventListener("click", handleDeletionDecision);
+    });
+  };
+
+  timelineDeleteTimelineT.addEventListener(
+    "click",
+    () => {
+      timelineAreYouSureHolderT.style.display = "flex";
+
+      timelineDeletionDecisionBtnsT.forEach((decisionBtn) => {
+        decisionBtn.addEventListener("click", handleDeletionDecision);
+      });
+    },
+    { once: true }
+  );
+};
+
 const handleTimelineOpening = async ({
   timelineID,
   timelineTitle,
@@ -516,6 +554,18 @@ const handleTimelineOpening = async ({
   const timelineMemoriesOwnerPicT = document.querySelector(
     "#timeline-memories-owner-pic-t"
   );
+  const timelineMemoryPictureZoomedHolderT = document.querySelector(
+    "#timeline-memory-picture-zoomed-holder-t"
+  );
+  const timelineMemoryPictureDescriptionT = document.querySelector(
+    "#timeline-memory-picture-description-t"
+  );
+  const timelineMemoryPictureZoomedT = document.querySelector(
+    "#timeline-memory-picture-zoomed-t"
+  );
+  const timelineDeleteTimelineT = document.querySelector(
+    "#timeline-delete-timeline-t"
+  );
 
   timelineMemorySlotsT.innerHTML = "";
 
@@ -529,6 +579,15 @@ const handleTimelineOpening = async ({
 
   timelineMemoriesTitleT.textContent = timelineTitle;
   timelineMemoriesOwnerPicT.src = timelineOwnerPicURL;
+
+  if (
+    Number(memories[0].timeline_owner_id) === Number(localStorage.loggedUserID)
+  ) {
+    timelineDeleteTimelineT.style.visibility = "visible";
+    handleTimelineDeletion(timelineOpenedDialogT);
+  } else {
+    timelineDeleteTimelineT.style.visibility = "hidden";
+  }
 
   await Promise.all(
     memories.map(async (memory, index) => {
@@ -544,10 +603,34 @@ const handleTimelineOpening = async ({
       timelineMemoryPositionDotT.className = "timeline-memory-position-dot-t";
       timelineMemoryDateT.className = "timeline-memory-date-t";
 
+      const red = Math.floor(Math.random() * 100) + 100;
+      const green = Math.floor(Math.random() * 100) + 100;
+      const blue = Math.floor(Math.random() * 100) + 100;
+
+      timelineMemoryPositionDotT.style.backgroundColor = `rgb(${red}, ${green}, ${blue})`;
+
       timelineMemoryDateT.textContent = new Date(
         memory.memory_date
       ).toLocaleDateString("en-bs");
       timelineMemoryPictureT.src = await getPicURL(memory.picture_data.data);
+
+      timelineMemoryPictureT.addEventListener("click", () => {
+        timelineMemoryPictureZoomedHolderT.style.display = "flex";
+        timelineMemoryPictureDescriptionT.textContent =
+          memory.memory_description || "No memory description.";
+
+        timelineMemoryPictureZoomedT.src = timelineMemoryPictureT.src;
+        timelineOpenedDialogT.close();
+
+        timelineMemoryPictureZoomedT.addEventListener(
+          "click",
+          () => {
+            timelineMemoryPictureZoomedHolderT.style.display = "none";
+            timelineOpenedDialogT.showModal();
+          },
+          { once: true }
+        );
+      });
 
       timelineMemorySlotsT.append(timelineMemorySlotT);
 
@@ -566,6 +649,7 @@ const handleTimelineOpening = async ({
   );
 
   timelineOpenedDialogT.showModal();
+  document.body.style.overflow = "hidden";
 };
 
 export const makeTimelineOpeningButtonsFunctional = () => {
@@ -588,6 +672,7 @@ export const makeTimelineOpeningButtonsFunctional = () => {
     offsetX = 0;
     timelineMemorySlotsT.style.transform = `translate(0, 0)`;
     timelineOpenedDialogT.close();
+    document.body.style.overflow = "auto";
   });
 
   timelineTimelineSideT.forEach((sideBtn) => {
