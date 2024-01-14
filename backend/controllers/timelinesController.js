@@ -4,24 +4,17 @@ timelinesController = {};
 
 const getTimelines = async (req, res) => {
   try {
-    let {
-      offset,
-      limit,
-      id,
-      owner,
-      "sort order": sortOrder,
-      "sort choice": sortChoice,
-    } = req.query;
+    let { offset, limit, user_id, owner, sort_order, sort_choice } = req.query;
 
     if (!offset || !limit) [offset, limit] = [0, 5];
 
     const timelines = await timelinesModel.getTimelines({
       offset,
       limit,
-      id,
+      user_id,
       owner,
-      sortOrder,
-      sortChoice,
+      sort_order,
+      sort_choice,
     });
 
     res.status(200).json(timelines);
@@ -57,11 +50,11 @@ const postMemory = async (req, res) => {
 
 const getMemories = async (req, res) => {
   try {
-    const { "timeline id": timelineID } = req.query;
+    const { timeline_id } = req.query;
 
-    console.log(timelineID)
+    console.log(timeline_id);
 
-    const memories = await timelinesModel.getMemories(timelineID);
+    const memories = await timelinesModel.getMemories(timeline_id);
 
     if (memories.length > 0) res.status(200).json(memories);
   } catch (err) {
@@ -70,9 +63,31 @@ const getMemories = async (req, res) => {
   }
 };
 
+const postTimelineVisit = async (req, res) => {
+  try {
+    const { visited_timeline_id, visitor_user_id } = req.body;
+
+    console.log(visited_timeline_id, visitor_user_id)
+
+    await timelinesModel.postTimelineVisit({
+      visited_timeline_id,
+      visitor_user_id,
+    });
+
+    console.log('Increasaed view count for timeline: ', visited_timeline_id)
+
+    res.sendStatus(200);
+  } catch (err) {
+    console.log(err);
+
+    res.sendStatus(500);
+  }
+};
+
 timelinesController.getTimelines = getTimelines;
 timelinesController.postTimeline = postTimeline;
 timelinesController.postMemory = postMemory;
 timelinesController.getMemories = getMemories;
+timelinesController.postTimelineVisit = postTimelineVisit;
 
 module.exports = timelinesController;
