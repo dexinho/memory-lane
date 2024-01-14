@@ -13,12 +13,13 @@ import { handleUserSearch } from "./findUser.js";
 import {
   createNewTimeline as handleTimelineCreation,
   displayTimelines,
-  makeTimelineOpeningButtonsFunctional,
+  makeTimelineSideBtnsFunctional,
 } from "./timelines.js";
 import {
   timelineCreationMemoriesSmoothScroll,
   timelineSlotsT,
 } from "./timelines.js";
+import { toggleLoadingAnimation } from "./loadingAnimation.js";
 
 const timelineQueryOptions = {
   timelineShowcaseOffset: 0,
@@ -42,7 +43,7 @@ const displayLoggedUserHeader = async () => {
     });
 
     const getLoggedUserData = await fetch(
-      `${URL}/users/get-user-data?id=${loggedUserID}`
+      `${URL}/users/get-user-data?user_id=${loggedUserID}`
     );
 
     const loggedUserData = await getLoggedUserData.json();
@@ -166,33 +167,6 @@ export const displayCurrentPageLogoAndName = async ({ picture, name }) => {
   currentTimelineHolderT.append(currentTimelineName);
 };
 
-const noTimelinesToShow = () => {
-  const filterHolder = document.querySelector("#filter-holder-t");
-
-  const timelineSlotT = document.createElement("div");
-  const timelineDescriptionDivT = document.createElement("div");
-  const timelineDescriptionT = document.createElement("div");
-  const timelinePictureDivT = document.createElement("div");
-  const timelinePresentPictureT = document.createElement("img");
-
-  timelineDescriptionDivT.className = "timeline-description-div-t";
-  timelinePresentPictureT.className = "timeline-present-picture-t";
-  timelineDescriptionT.className = "timeline-description-t";
-  timelinePictureDivT.className = "timeline-picture-div-t cursor-pointer";
-  timelineSlotT.className = "timeline-slot-t";
-
-  timelinePresentPictureT.src =
-    "../../assets/example_pictures/no_timelines_text.png";
-
-  timelineSlotsT.append(timelineSlotT);
-  timelinePictureDivT.append(timelinePresentPictureT);
-  timelineSlotT.append(timelinePictureDivT);
-
-  timelineSlotT.style.border = "0";
-  timelineSlotT.style.padding = "3rem";
-  filterHolder.style.visibility = "hidden";
-};
-
 const handleUserScroll = () => {
   let areTimelinesLoading = false;
   window.addEventListener("scroll", async () => {
@@ -241,19 +215,23 @@ const checkUrlParameters = async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const userID = urlParams.get("user-id");
 
-  if (localStorage.justLoggedIn) {
-    timelineUserProfileT.style.display = "none";
-    loginPopUpMsgT.showModal();
-
-    localStorage.justLoggedIn = "";
-  }
-
   try {
+    toggleLoadingAnimation();
+
+    if (localStorage.justLoggedIn) {
+      timelineUserProfileT.style.display = "none";
+      loginPopUpMsgT.showModal();
+
+      localStorage.justLoggedIn = "";
+    }
+
     await displayLoggedUserHeader();
     const timelines = await getTimelines(userID);
 
     const userDataResponse = await fetch(
-      `${URL}/users/get-user-data?id=${userID || localStorage.loggedUserID}`
+      `${URL}/users/get-user-data?user_id=${
+        userID || localStorage.loggedUserID
+      }`
     );
     const userData = await userDataResponse.json();
 
@@ -269,12 +247,13 @@ const checkUrlParameters = async () => {
     }
 
     await displayTimelines({ timelines });
-    makeTimelinesFilterable();
+    makeTimelinesSortable();
   } catch (err) {
     console.log(err);
   } finally {
-    loginPopUpMsgT.close();
     timelineUserProfileT.style.display = "grid";
+    loginPopUpMsgT.close();
+    toggleLoadingAnimation();
   }
 };
 
@@ -283,9 +262,9 @@ const getTimelines = async (userID) => {
     let query = "";
 
     if (userID) {
-      query = `${URL}/timelines/get-timelines?id=${userID}&offset=${timelineQueryOptions.timelineShowcaseOffset}&limit=${timelineQueryOptions.timelineShowcaseLimit}&sort%20choice=${timelineQueryOptions.sortChoice}&sort%20order=${timelineQueryOptions.sortOrder}`;
+      query = `${URL}/timelines/get-timelines?user_id=${userID}&offset=${timelineQueryOptions.timelineShowcaseOffset}&limit=${timelineQueryOptions.timelineShowcaseLimit}&sort_choice=${timelineQueryOptions.sortChoice}&sort_order=${timelineQueryOptions.sortOrder}`;
     } else {
-      query = `${URL}/timelines/get-timelines?offset=${timelineQueryOptions.timelineShowcaseOffset}&limit=${timelineQueryOptions.timelineShowcaseLimit}&sort%20choice=${timelineQueryOptions.sortChoice}&sort%20order=${timelineQueryOptions.sortOrder}`;
+      query = `${URL}/timelines/get-timelines?offset=${timelineQueryOptions.timelineShowcaseOffset}&limit=${timelineQueryOptions.timelineShowcaseLimit}&sort_choice=${timelineQueryOptions.sortChoice}&sort_order=${timelineQueryOptions.sortOrder}`;
 
       if (Number(userID) === Number(localStorage.loggedUserID)) {
         query += `&${owner}=true`;
@@ -313,7 +292,7 @@ const handleHomePageBtn = () => {
   homeBtnT.addEventListener("click", () => urlNavigation(url));
 };
 
-const makeTimelinesFilterable = () => {
+const makeTimelinesSortable = () => {
   const filter = document.querySelector("#filter-holder-t");
   const filterDropdownT = document.querySelector("#filter-dropdown-t");
   const filterOptionsT = document.querySelectorAll(".filter-option-t");
@@ -380,4 +359,4 @@ handleTimelineCreation();
 handleUserScroll();
 handleHomePageBtn();
 timelineCreationMemoriesSmoothScroll();
-makeTimelineOpeningButtonsFunctional();
+makeTimelineSideBtnsFunctional();
