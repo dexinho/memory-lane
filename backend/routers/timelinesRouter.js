@@ -7,5 +7,7 @@ router.get('/get-memories', timelinesController.getMemories)
 
 router.post('/post-timeline', timelinesController.postTimeline)
 router.post('/post-memory', timelinesController.postMemory)
+router.post('/post-timeline-visit', timelinesController.postTimelineVisit)
+
 
 module.exports = router;
