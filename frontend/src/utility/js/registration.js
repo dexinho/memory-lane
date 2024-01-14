@@ -5,7 +5,7 @@ import {
   confirmPasswordInputR,
   registrationPopUpMsgR,
 } from "./querySelectors.js";
-import { URL } from "./globalVar.js";
+import { URL } from "./URL.js";
 
 submitRegisterBtn.addEventListener("click", (e) => {
   e.preventDefault();
