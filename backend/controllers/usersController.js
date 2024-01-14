@@ -4,11 +4,11 @@ usersController = {};
 
 const getProfilePicture = async (req, res) => {
   try {
-    const userID = req.query?.id;
+    const { user_id } = req.query;
 
-    if (!userID) throw new Error("No id provided!");
+    if (!user_id) throw new Error("No id provided!");
 
-    const [picture] = await usersModel.getProfilePicture(userID);
+    const [picture] = await usersModel.getProfilePicture(user_id);
 
     res.status(200).json(picture);
   } catch (err) {
@@ -19,8 +19,8 @@ const getProfilePicture = async (req, res) => {
 
 const getUserData = async (req, res) => {
   try {
-    const { id } = req.query;
-    const data = await usersModel.getUserData(id);
+    const { user_id } = req.query;
+    const data = await usersModel.getUserData(user_id);
     res.status(200).json(data);
   } catch (err) {
     console.log(err);
