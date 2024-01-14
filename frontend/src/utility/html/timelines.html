@@ -14,19 +14,36 @@
 </head>
 
 <body>
-  <dialog id="login-pop-up-msg-t">
+  <div id="loading-circle"></div>
+  <div id="timeline-memory-picture-zoomed-holder-t">
     <div>
+      <img id="timeline-memory-picture-zoomed-t">
+      <div id="timeline-memory-picture-description-holder-t">
+        <div id="timeline-memory-picture-description-t"></div>
+      </div>
+    </div>
+  </div>
+  <dialog id="login-pop-up-msg-t">
+    <div id="login-pop-up-confirmation-t">
       <i class="fa-solid fa-check"></i>
-      Success!
+      <div>Success!</div>
     </div>
   </dialog>
   <div id="container-t">
     <dialog id="confirmation-pop-up-t">
     </dialog>
     <dialog id="timeline-opened-dialog-t">
+      <div id="timeline-are-you-sure-holder-t">
+        <div>You are about to delete this timeline. Are you sure?</div>
+        <div>
+          <button class="timeline-deletion-decision-btns-t">Yes</button>
+          <button class="timeline-deletion-decision-btns-t">No</button>
+        </div>
+
+      </div>
       <div id="timeline-opened-holder-t">
         <div id="timeline-header-t">
-          <div id="timeline-delete-timeline-t"><i class="fa-solid fa-trash"></i></div>
+          <div id="timeline-delete-timeline-t"><i class="fa-solid fa-trash timeline-delete-timeline-t"></i></div>
           <div id="timeline-memories-pic-title-t">
             <img id='timeline-memories-owner-pic-t'>
             <div id="timeline-memories-title-t"></div>
