@@ -1,8 +1,25 @@
 import { URL } from "./URL.js";
 import { getPicURL } from "./getPicURL.js";
 import { urlNavigation } from "./URL.js";
+import { toggleLoadingAnimation } from "./loadingAnimation.js";
 
 export const timelineSlotsT = document.createElement("div");
+
+const TIMELINE_CREATION_DATA = {
+  timeline_background_color: "",
+  timeline_date_created: Date.now(),
+  timeline_date_updated: Date.now(),
+  timeline_font_color: "",
+  timeline_font_family: "",
+  timeline_id: 0,
+  timeline_is_public: 0,
+  timeline_owner_id: 0,
+  timeline_picture_data: null,
+  timeline_title: "",
+  timeline_view_count: 0,
+  user_first_name: "",
+  user_last_name: "",
+};
 
 const confirmationPopUpMsg = (msg) => {
   const confirmationPopUpT = document.querySelector("#confirmation-pop-up-t");
@@ -14,22 +31,6 @@ const confirmationPopUpMsg = (msg) => {
   setTimeout(() => {
     confirmationPopUpT.close();
   }, 1500);
-};
-
-const TIMELINE_CREATION_DATA = {
-  timeline_background_color: "",
-  timeline_date_created: Date.now(),
-  timeline_date_updated: Date.now(),
-  timeline_font_color: "",
-  timeline_font_family: "",
-  timeeline_id: 0,
-  timeline_is_public: 0,
-  timeline_owner_id: 0,
-  timeline_picture_data: null,
-  timeline_title: "",
-  timeline_view_count: 0,
-  user_first_name: "",
-  user_last_name: "",
 };
 
 export const displayTimelines = async ({ timelines, toAppend = true }) => {
@@ -95,10 +96,6 @@ export const displayTimelines = async ({ timelines, toAppend = true }) => {
           timeline.timeline_date_updated
         ).toLocaleDateString("en-bs");
 
-        timelineSlotT.style.backgroundColor = `${timeline.timeline_background_color} #BDC23D`;
-        timelineDescriptionT.style.fontFamily = `${timeline.timeline_font_family} sans-serif`;
-        timelineDescriptionT.style.color = `${timeline.timeline_font_color} black`;
-
         if (toAppend) timelineSlotsT.append(timelineSlotT);
         else timelineSlotsT.prepend(timelineSlotT);
 
@@ -126,7 +123,7 @@ export const displayTimelines = async ({ timelines, toAppend = true }) => {
         timelineSlotT.append(createdUpdatedT);
 
         const getUserPictureResponse = await fetch(
-          `${URL}/users/get-profile-picture?id=${timeline.timeline_owner_id}`
+          `${URL}/users/get-profile-picture?user_id=${timeline.timeline_owner_id}`
         );
 
         if (!getUserPictureResponse.ok) {
@@ -152,6 +149,9 @@ export const displayTimelines = async ({ timelines, toAppend = true }) => {
             timelineID: timeline.timeline_id,
             timelineTitle: timeline.timeline_title,
             timelineOwnerPicURL: timelineOwnerProfilePictureT.src,
+            timelineBackgroundColor: timeline.timeline_background_color,
+            timelineFontFamily: timeline.timeline_font_family,
+            timelineFontColor: timeline.timeline_font_color,
           })
         );
 
@@ -380,10 +380,18 @@ const publishTimeline = async () => {
       formElements: timelineMemoryFormT,
     });
 
+    const userNameT = document.querySelector(".user-name-t");
+
+    TIMELINE_CREATION_DATA.timeline_id = timelineID;
+    TIMELINE_CREATION_DATA.timeline_owner_id = localStorage.loggedUserID;
+    TIMELINE_CREATION_DATA.user_first_name =
+      userNameT.textContent.split(" ")[0];
+    TIMELINE_CREATION_DATA.user_last_name = userNameT.textContent.split(" ")[1];
+
     const urlParams = new URLSearchParams(window.location.search);
     const userID = urlParams.get("user-id");
 
-    if (!userID)
+    if (!userID || userID === localStorage.loggedUserID)
       await displayTimelines({
         timelines: [TIMELINE_CREATION_DATA],
         toAppend: false,
@@ -515,8 +523,8 @@ const handleTimelineDeletion = (openedTimelineDialog) => {
   const handleDeletionDecision = (event) => {
     if (event.target.textContent === "Yes") {
       openedTimelineDialog.close();
-      console.log("yes");
-    } else if (event.target.textContent === "No") console.log("no");
+      timelineDeleteTimelineT.removeEventListener("click", openDecisionWindow);
+    }
 
     timelineAreYouSureHolderT.style.display = "none";
 
@@ -525,28 +533,29 @@ const handleTimelineDeletion = (openedTimelineDialog) => {
     });
   };
 
-  timelineDeleteTimelineT.addEventListener(
-    "click",
-    () => {
-      timelineAreYouSureHolderT.style.display = "flex";
+  const openDecisionWindow = () => {
+    timelineAreYouSureHolderT.style.display = "flex";
 
-      timelineDeletionDecisionBtnsT.forEach((decisionBtn) => {
-        decisionBtn.addEventListener("click", handleDeletionDecision);
-      });
-    },
-    { once: true }
-  );
+    timelineDeletionDecisionBtnsT.forEach((decisionBtn) => {
+      decisionBtn.addEventListener("click", handleDeletionDecision);
+    });
+  };
+
+  timelineDeleteTimelineT.addEventListener("click", openDecisionWindow);
 };
 
 const handleTimelineOpening = async ({
   timelineID,
   timelineTitle,
   timelineOwnerPicURL,
+  timelineBackgroundColor,
+  timelineFontFamily,
+  timelineFontColor,
 }) => {
+  console.log(timelineBackgroundColor, timelineFontFamily, timelineFontColor);
   const timelineOpenedDialogT = document.querySelector(
     "#timeline-opened-dialog-t"
   );
-
   const timelineMemorySlotsT = document.querySelector("#timeline-memory-slots");
   const timelineMemoriesTitleT = document.querySelector(
     "#timeline-memories-title-t"
@@ -566,93 +575,133 @@ const handleTimelineOpening = async ({
   const timelineDeleteTimelineT = document.querySelector(
     "#timeline-delete-timeline-t"
   );
+  const timelineTimelineSideT = document.querySelectorAll(
+    ".timeline-timeline-side-t"
+  );
+
+  toggleLoadingAnimation();
+
+  timelineOpenedDialogT.style.backgroundColor =
+    timelineBackgroundColor || "white";
+  timelineOpenedDialogT.style.fontStyle = timelineFontFamily || "sans-serif";
 
   timelineMemorySlotsT.innerHTML = "";
 
   const getMemoriesResponse = await fetch(
-    `${URL}/timelines/get-memories?timeline%20id=${timelineID}`
+    `${URL}/timelines/get-memories?timeline_id=${timelineID}`
   );
 
   if (!getMemoriesResponse.ok) return;
 
   const memories = await getMemoriesResponse.json();
 
-  timelineMemoriesTitleT.textContent = timelineTitle;
-  timelineMemoriesOwnerPicT.src = timelineOwnerPicURL;
+  if (memories.length === 0) return;
 
-  if (
-    Number(memories[0].timeline_owner_id) === Number(localStorage.loggedUserID)
-  ) {
+  const timelineOwnerID = memories[0].timeline_owner_id;
+
+  timelineTimelineSideT.forEach((sideBtn) => {
+    if (memories.length < 4) {
+      sideBtn.style.visibility = "hidden";
+    } else {
+      sideBtn.style.visibility = "visible";
+    }
+  });
+
+  if (Number(timelineOwnerID) === Number(localStorage.loggedUserID)) {
     timelineDeleteTimelineT.style.visibility = "visible";
     handleTimelineDeletion(timelineOpenedDialogT);
   } else {
     timelineDeleteTimelineT.style.visibility = "hidden";
+    await postTimelineVisit({
+      visitedTimelineID: timelineID,
+      vistorUserID: localStorage.loggedUserID,
+    });
   }
 
+  timelineMemoriesTitleT.textContent = timelineTitle;
+  timelineMemoriesOwnerPicT.src = timelineOwnerPicURL;
+
   await Promise.all(
-    memories.map(async (memory, index) => {
-      const timelineMemorySlotT = document.createElement("div");
-      const picHolderT = document.createElement("div");
-      const timelineMemoryPictureT = document.createElement("img");
+    memories.reduceRight((promises, memory, index) => {
+      const promise = (async () => {
+        const timelineMemorySlotT = document.createElement("div");
+        const picHolderT = document.createElement("div");
+        const timelineMemoryPictureT = document.createElement("img");
 
-      const timelineMemoryPositionDotT = document.createElement("div");
-      const timelineMemoryDateT = document.createElement("div");
+        const timelineMemoryPositionDotT = document.createElement("div");
+        const timelineMemoryDateT = document.createElement("div");
 
-      timelineMemorySlotT.className = "timeline-memory-slot";
-      timelineMemoryPictureT.className = "timeline-memory-picture-t";
-      timelineMemoryPositionDotT.className = "timeline-memory-position-dot-t";
-      timelineMemoryDateT.className = "timeline-memory-date-t";
+        timelineMemorySlotT.className = "timeline-memory-slot";
+        timelineMemoryPictureT.className = "timeline-memory-picture-t";
+        timelineMemoryPositionDotT.className = "timeline-memory-position-dot-t";
+        timelineMemoryDateT.className = "timeline-memory-date-t";
 
-      const red = Math.floor(Math.random() * 100) + 100;
-      const green = Math.floor(Math.random() * 100) + 100;
-      const blue = Math.floor(Math.random() * 100) + 100;
+        const red = Math.floor(Math.random() * 100) + 100;
+        const green = Math.floor(Math.random() * 100) + 100;
+        const blue = Math.floor(Math.random() * 100) + 100;
 
-      timelineMemoryPositionDotT.style.backgroundColor = `rgb(${red}, ${green}, ${blue})`;
+        timelineMemoryPositionDotT.style.backgroundColor = `rgb(${red}, ${green}, ${blue})`;
 
-      timelineMemoryDateT.textContent = new Date(
-        memory.memory_date
-      ).toLocaleDateString("en-bs");
-      timelineMemoryPictureT.src = await getPicURL(memory.picture_data.data);
+        timelineMemoryDateT.textContent = new Date(
+          memory.memory_date
+        ).toLocaleDateString("en-bs");
+        timelineMemoryPictureT.src = await getPicURL(memory.picture_data.data);
 
-      timelineMemoryPictureT.addEventListener("click", () => {
-        timelineMemoryPictureZoomedHolderT.style.display = "flex";
-        timelineMemoryPictureDescriptionT.textContent =
-          memory.memory_description || "No memory description.";
+        timelineMemoryPictureT.addEventListener("click", () => {
+          timelineMemoryPictureZoomedHolderT.style.display = "flex";
+          timelineMemoryPictureDescriptionT.style.color =
+            timelineFontColor || "black";
+          timelineMemoryPictureDescriptionT.textContent =
+            memory.memory_description || "No memory description.";
 
-        timelineMemoryPictureZoomedT.src = timelineMemoryPictureT.src;
-        timelineOpenedDialogT.close();
+          timelineMemoryPictureZoomedT.src = timelineMemoryPictureT.src;
+          timelineOpenedDialogT.close();
 
-        timelineMemoryPictureZoomedT.addEventListener(
-          "click",
-          () => {
-            timelineMemoryPictureZoomedHolderT.style.display = "none";
-            timelineOpenedDialogT.showModal();
-          },
-          { once: true }
+          timelineMemoryPictureZoomedT.addEventListener(
+            "click",
+            () => {
+              timelineMemoryPictureZoomedHolderT.style.display = "none";
+              timelineOpenedDialogT.showModal();
+            },
+            { once: true }
+          );
+        });
+
+        timelineMemorySlotsT.append(timelineMemorySlotT);
+
+        timelineMemorySlotT.append(picHolderT);
+        timelineMemorySlotT.append(timelineMemoryPositionDotT);
+        timelineMemorySlotT.append(timelineMemoryDateT);
+
+        picHolderT.append(timelineMemoryPictureT);
+
+        let slotWidth = parseInt(
+          getComputedStyle(timelineMemorySlotT).width,
+          10
         );
-      });
+        let slotOffset = 0;
 
-      timelineMemorySlotsT.append(timelineMemorySlotT);
+        if (memories.length === 1) {
+          slotOffset += 1;
+        } else if (memories.length === 2) {
+          slotOffset += 0.5;
+        }
 
-      timelineMemorySlotT.append(picHolderT);
-      timelineMemorySlotT.append(timelineMemoryPositionDotT);
-      timelineMemorySlotT.append(timelineMemoryDateT);
+        timelineMemorySlotT.style.right = `${
+          slotWidth * (memories.length - index - slotOffset)
+        }px`;
+      })();
 
-      picHolderT.append(timelineMemoryPictureT);
-
-      const slotWdith = parseInt(
-        getComputedStyle(timelineMemorySlotT, 10).width
-      );
-
-      timelineMemorySlotT.style.right = `${slotWdith * index}px`;
-    })
+      return [...promises, promise];
+    }, [])
   );
 
   timelineOpenedDialogT.showModal();
   document.body.style.overflow = "hidden";
+  toggleLoadingAnimation();
 };
 
-export const makeTimelineOpeningButtonsFunctional = () => {
+export const makeTimelineSideBtnsFunctional = () => {
   let offsetX = 0;
   let intervalId;
   let shiftX = 20;
@@ -701,5 +750,47 @@ export const makeTimelineOpeningButtonsFunctional = () => {
 
       timelineMemorySlotsT.style.transform = `translate(${offsetX}px, 0)`;
     }
+  });
+};
+
+const noTimelinesToShow = () => {
+  const filterHolder = document.querySelector("#filter-holder-t");
+
+  const timelineSlotT = document.createElement("div");
+  const timelineDescriptionDivT = document.createElement("div");
+  const timelineDescriptionT = document.createElement("div");
+  const timelinePictureDivT = document.createElement("div");
+  const timelinePresentPictureT = document.createElement("img");
+
+  timelineDescriptionDivT.className = "timeline-description-div-t";
+  timelinePresentPictureT.className = "timeline-present-picture-t";
+  timelineDescriptionT.className = "timeline-description-t";
+  timelinePictureDivT.className = "timeline-picture-div-t cursor-pointer";
+  timelineSlotT.className = "timeline-slot-t";
+
+  timelinePresentPictureT.src =
+    "../../assets/example_pictures/no_timelines_text.png";
+
+  timelineSlotsT.append(timelineSlotT);
+  timelinePictureDivT.append(timelinePresentPictureT);
+  timelineSlotT.append(timelinePictureDivT);
+
+  timelineSlotT.style.border = "0";
+  timelineSlotT.style.padding = "3rem";
+  filterHolder.style.visibility = "hidden";
+};
+
+const postTimelineVisit = async ({ visitedTimelineID, vistorUserID }) => {
+  const timelineVisitBody = {
+    visited_timeline_id: visitedTimelineID,
+    visitor_user_id: vistorUserID,
+  };
+
+  await fetch(`${URL}/timelines/post-timeline-visit`, {
+    method: "POST",
+    body: JSON.stringify(timelineVisitBody),
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
 };
