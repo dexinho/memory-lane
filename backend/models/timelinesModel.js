@@ -5,15 +5,15 @@ timelinesModel = {};
 const getTimelines = async ({
   offset,
   limit,
-  id = null,
+  user_id = null,
   owner = null,
-  sortOrder,
-  sortChoice,
+  sort_order,
+  sort_choice,
 }) => {
-  console.log(offset, limit, id, owner, sortChoice, sortOrder);
+  console.log(offset, limit, user_id, owner, sort_choice, sort_order);
 
-  if (sortChoice === "updated") sortChoice = "timeline_date_updated";
-  else if (sortChoice === "views") sortChoice = "timeline_view_count";
+  if (sort_choice === "updated") sort_choice = "timeline_date_updated";
+  else if (sort_choice === "views") sort_choice = "timeline_view_count";
 
   try {
     const [timelines] = await connection.execute(
@@ -42,9 +42,9 @@ const getTimelines = async ({
           (t.timeline_is_public = 1 AND ? IS NULL)
           OR 
           (t.timeline_owner_id = ? AND ? IS NOT NULL AND t.timeline_is_public = 1)
-      ORDER BY ${sortChoice} ${sortOrder}
+      ORDER BY ${sort_choice} ${sort_order}
       LIMIT ?, ?`,
-      [id, owner, id, id, id, offset, limit]
+      [user_id, owner, user_id, user_id, user_id, offset, limit]
     );
 
     return timelines;
@@ -106,17 +106,34 @@ const postMemory = async ({
   }
 };
 
-const getMemories = async (timelineID) => {
+const getMemories = async (timeline_id) => {
   try {
     const [memories] = await connection.execute(
       `SELECT memory_id, timeline_owner_id, memory_date, picture_data, memory_description 
       FROM memories JOIN pictures ON memories.memory_picture_id = pictures.picture_id 
       JOIN timelines on timelines.timeline_id = memories.memory_timeline_id
       WHERE memory_timeline_id = ?`,
-      [timelineID]
+      [timeline_id]
     );
 
     return memories;
+  } catch (err) {
+    console.log(err);
+
+    return;
+  }
+};
+
+const postTimelineVisit = async ({ visited_timeline_id, visitor_user_id }) => {
+  try {
+    console.log(visited_timeline_id, visitor_user_id)
+    await connection.execute(
+      `INSERT INTO timeline_visits (timeline_visit_timeline_id, timeline_visit_user_id)
+      VALUES (?, ?)`,
+      [visited_timeline_id, visitor_user_id]
+    );
+
+    return;
   } catch (err) {
     console.log(err);
 
@@ -128,5 +145,6 @@ timelinesModel.getTimelines = getTimelines;
 timelinesModel.postTimeline = postTimeline;
 timelinesModel.postMemory = postMemory;
 timelinesModel.getMemories = getMemories;
+timelinesModel.postTimelineVisit = postTimelineVisit;
 
 module.exports = timelinesModel;
