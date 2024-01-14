@@ -30,14 +30,14 @@ const getUserData = async (id) => {
   }
 };
 
-const search = async (query) => {
+const search = async (user_id) => {
   try {
     const [userData] = await connection.execute(
       `SELECT user_id, user_first_name, user_last_name, picture_data 
     FROM users join pictures
     on users.user_picture_id = pictures.picture_id
     where CONCAT(user_first_name, ' ', user_last_name) LIKE ?`,
-      [`%${query}%`]
+      [`%${user_id}%`]
     );
 
     return userData;
