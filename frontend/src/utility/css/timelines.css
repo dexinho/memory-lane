@@ -331,26 +331,35 @@ select:hover {
 
 #login-pop-up-msg-t {
   position: absolute;
-  width: 250px;
-  height: 250px;
+  width: 200px;
+  height: 200px;
   gap: 1rem;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 1);
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   padding: 2rem;
-  font-size: 2rem;
+  font-size: 1.4rem;
   border-radius: 100%;
+  /* display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap; */
 }
 
-#login-pop-up-msg-t>* {
+#login-pop-up-confirmation-t {
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 1rem;
+  color: whitesmoke;
+}
+
+#login-pop-up-confirmation-t > * {
+  width: 100%;
+  text-align: center;
 }
 
 .fa-check {
@@ -724,7 +733,7 @@ select:hover {
   border-radius: 1rem;
 }
 
-#filter-br-t  {
+#filter-br-t {
   grid-column: 1/3;
   width: 100%;
   height: 1px;
@@ -764,7 +773,7 @@ select:hover {
 }
 
 .filter-dropdown-display-toggle-t {
-  display: grid !important; 
+  display: grid !important;
 }
 
 .pct {
@@ -788,6 +797,9 @@ select:hover {
   top: 50%;
   transform: translate(-50%, -50%);
   padding: 1rem;
+  box-shadow: 1px 1px 1px black;
+  border: 1px solid;
+  border-radius: 1rem;
 }
 
 #timeline-opened-holder-t {
@@ -804,7 +816,7 @@ select:hover {
 #timeline-middle-t {
   position: relative;
   width: 100%;
-  height: 400px;
+  height: 350px;
   display: flex;
   justify-content: center;
 }
@@ -818,7 +830,7 @@ select:hover {
 
 #timeline-timeline-t {
   position: absolute;
-  bottom: 6.9rem;
+  bottom: 3.7rem;
   border: 2px solid black;
   width: 100%;
 }
@@ -885,12 +897,16 @@ select:hover {
   border: 1px solid black;
 }
 
+.timeline-memory-picture-t:hover {
+  border: 3px solid black;
+  cursor: pointer;
+}
+
 .timeline-memory-position-dot-t {
   position: relative;
   width: 40px;
   height: 40px;
   border-radius: 100%;
-  background-color: rgb(126, 50, 50);
   translate: 0 -2.4rem;
   z-index: 10;
 }
@@ -898,7 +914,7 @@ select:hover {
 .timeline-memory-date-t {
   position: absolute;
   bottom: 0;
-  translate: 0 -4rem;
+  translate: 0 -3.5rem;
   font-weight: bold;
 }
 
@@ -930,4 +946,127 @@ select:hover {
   width: 80px;
   height: 80px;
   border-radius: 100%;
+}
+
+#timeline-memory-picture-zoomed-holder-t {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(129, 126, 126, 0.95);
+  border-radius: 1rem;
+  z-index: 200;
+}
+
+#timeline-memory-picture-zoomed-t {
+  height: auto;
+  max-height: 500px;
+  max-width: 1000px;
+  border: 1rem;
+}
+
+#timeline-memory-picture-zoomed-t:hover {
+  cursor: pointer;
+  border: 2px solid black;
+}
+
+#timeline-memory-picture-description-holder-t {
+  width: 400px;
+  margin: auto;
+  font-size: 2rem;
+  color: var(--tertiary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+  text-align: center;
+  -webkit-text-stroke: 1px rgb(37, 32, 37);
+}
+
+#timeline-memory-picture-description-t {
+  background-color: rgb(255, 255, 255);
+  padding: 1rem;
+  max-width: 800px;
+  border-radius: 1rem;
+}
+
+.timeline-delete-timeline-t {
+  font-size: 1.6rem;
+}
+
+.timeline-delete-timeline-t:hover {
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+#timeline-are-you-sure-holder-t {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1rem;
+  z-index: 10000;
+  background-color: rgb(41, 38, 38);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  border-radius: 1rem;
+}
+
+#timeline-are-you-sure-holder-t>* {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  font-size: 1.8rem;
+  text-align: center;
+  color: whitesmoke;
+}
+
+.timeline-deletion-decision-btns-t {
+  width: 40%;
+  height: 50px;
+  font-size: 1.2rem;
+}
+
+.timeline-deletion-decision-btns-t:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+  color: whitesmoke;
+}
+
+#loading-circle {
+  display: none;
+  position: fixed;
+  border: 15px solid whitesmoke;
+  border-top: 15px solid var(--secondary-color);
+  border-radius: 100%;
+  width: 225px;
+  height: 225px;
+  z-index: 100;
+  inset: 50%;
+  translate: -50% -50%;
+}
+
+.animate-loading-circle {
+  display: block !important;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
