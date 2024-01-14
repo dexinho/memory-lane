@@ -17,7 +17,6 @@ CREATE TABLE users (
         REFERENCES pictures (picture_id)
 );
 
-
 CREATE TABLE timelines (
     timeline_id INT PRIMARY KEY AUTO_INCREMENT,
     timeline_title VARCHAR(40) default 'timeline',
@@ -28,8 +27,8 @@ CREATE TABLE timelines (
     timeline_owner_id INT,
     timeline_picture_id INT,
     timeline_view_count INT DEFAULT 0,
-    timeline_date_created DATE,
-    timeline_date_updated DATE,
+    timeline_date_created TIMESTAMP,
+    timeline_date_updated TIMESTAMP,
     FOREIGN KEY (timeline_owner_id)
         REFERENCES users (user_id)
         ON DELETE CASCADE,
@@ -52,7 +51,7 @@ CREATE TABLE timeline_visits (
 
 CREATE TABLE memories (
     memory_id INT PRIMARY KEY AUTO_INCREMENT,
-    memory_date DATE,
+    memory_date TIMESTAMP,
     memory_picture_id INT,
     memory_timeline_id INT,
     memory_description TEXT,
@@ -80,10 +79,12 @@ WHERE
 END // 
 DELIMITER ;
 
+drop trigger update_timeline_date;
+
 CREATE 
     TRIGGER  update_timeline_date
  AFTER INSERT ON memories FOR EACH ROW 
-    UPDATE timelines SET timeline_date_updated = CURRENT_DATE() WHERE
+    UPDATE timelines SET timeline_date_updated = NOW() WHERE
         timeline_id = NEW.memory_timeline_id;
 
 CREATE 
