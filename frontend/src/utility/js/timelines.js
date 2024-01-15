@@ -152,6 +152,7 @@ export const displayTimelines = async ({ timelines, toAppend = true }) => {
             timelineBackgroundColor: timeline.timeline_background_color,
             timelineFontFamily: timeline.timeline_font_family,
             timelineFontColor: timeline.timeline_font_color,
+            timelineIsPublic: timeline.timeline_is_public,
           })
         );
 
@@ -168,8 +169,7 @@ export const displayTimelines = async ({ timelines, toAppend = true }) => {
   }
 };
 
-export const createNewTimeline = () => {
-  const uploadBtn = document.querySelector(".upload-memory-picture-btn-t");
+export const handleTimelineCreation = async () => {
   const timelineCreationDialogT = document.querySelector(
     "#timeline-creation-dialog-t"
   );
@@ -182,14 +182,57 @@ export const createNewTimeline = () => {
   const timelineNewMemoryBtnT = document.querySelector(
     "#timeline-new-memory-btn-t"
   );
-  const uploadedPictureHolderDiv = document.querySelector(
-    ".uploaded-memory-picture-holder-t"
+
+  const timelineDeleteTimelineT = document.querySelector(
+    "#timeline-delete-timeline-t"
   );
-  const inputElement = document.querySelector(".memory-picture-input-t");
-  const formElement = document.querySelector(".timeline-memory-form-t");
-  const timelinePublishBtnT = document.querySelector("#timeline-publish-btn-t");
+
+  timelineDeleteTimelineT.style.visibility = "hidden";
+
+  const resetTimelineCreationInputs = () => {
+    const timelineCreationTitleT = document.querySelector(
+      "#timeline-creation-title-t"
+    );
+    const timelineSettingsInputsT = document.querySelectorAll(
+      ".timeline-settings-input-t"
+    );
+    const timelineMemorySlotsT = document.querySelector(
+      ".timeline-memory-slots-t"
+    );
+    const timelineMemoriesCountDivT = document.querySelector(
+      "#timeline-memories-count-div-t"
+    );
+    const timelineTitleInputT = document.querySelector(
+      "#timeline-title-input-t"
+    );
+
+    const timelinePublishDivT = document.querySelector(
+      "#timeline-publish-div-t"
+    );
+    const timelinePublishBtnT = document.querySelector("button");
+
+    timelinePublishBtnT.id = "timeline-publish-btn-t";
+    timelinePublishDivT.innerHTML = "";
+    timelinePublishBtnT.textContent = "PUBLISH TIMELINE";
+    timelinePublishDivT.append(timelinePublishBtnT);
+    timelinePublishBtnT.addEventListener("click", () => publishTimeline());
+
+    timelineCreationTitleT.textContent = "TIMELINE CREATION";
+    timelineMemoriesCountDivT.textContent = "Memories(1)";
+    timelineTitleInputT.value = "";
+
+    timelineSettingsInputsT.forEach((settingInput) => {
+      if (settingInput.id === "timeline-is-public-input-t")
+        settingInput.checked = 1;
+      else settingInput.value = "";
+    });
+
+    timelineMemorySlotsT.innerHTML = "";
+    addTimelineSlot();
+  };
 
   createNewTimelineBtnT.addEventListener("click", () => {
+    resetTimelineCreationInputs();
     timelineCreationDialogT.showModal();
     document.body.style.overflow = "hidden";
   });
@@ -200,22 +243,16 @@ export const createNewTimeline = () => {
   });
 
   timelineNewMemoryBtnT.addEventListener("click", addTimelineSlot);
-
-  handleMemorySlotUpload({
-    uploadBtn,
-    formElement,
-    inputElement,
-    uploadedPictureHolderDiv,
-  });
-
-  timelinePublishBtnT.addEventListener("click", publishTimeline);
 };
 
-const addTimelineSlot = () => {
+const createTimelineMemoryForm = async (
+  { memoryDescription, memoryImageBlob } = ""
+) => {
   const timelineMemorySlotsT = document.querySelector(
     ".timeline-memory-slots-t"
   );
   const memorySlotDiv = document.createElement("div");
+  const memoryImage = new Image();
 
   memorySlotDiv.classList.add("timeline-memory-slot-t");
 
@@ -246,7 +283,7 @@ const addTimelineSlot = () => {
   const uploadBtn = document.createElement("button");
   uploadBtn.classList.add("upload-memory-picture-btn-t");
   uploadBtn.textContent = "UPLOAD PICTURE";
-  uploadBtnDiv.appendChild(uploadBtn);
+  uploadBtnDiv.append(uploadBtn);
 
   const uploadedPictureHolderDiv = document.createElement("div");
   uploadedPictureHolderDiv.classList.add("uploaded-memory-picture-holder-t");
@@ -254,21 +291,24 @@ const addTimelineSlot = () => {
   const deleteBtnDiv = document.createElement("div");
   const deleteIcon = document.createElement("i");
   deleteIcon.classList.add("fa-solid", "fa-trash", "timeline-remove-slot-t");
-  deleteBtnDiv.appendChild(deleteIcon);
+  deleteBtnDiv.append(deleteIcon);
 
-  memoryInputsDiv.appendChild(textareaElement);
-  memoryInputsDiv.appendChild(inputElement);
-  memoryInputsDiv.appendChild(uploadBtnDiv);
-  memoryInputsDiv.appendChild(uploadedPictureHolderDiv);
+  uploadedPictureHolderDiv.append(memoryImage);
 
-  formElement.appendChild(memoryNumberDiv);
-  formElement.appendChild(memoryInputsDiv);
-  formElement.appendChild(deleteBtnDiv);
+  memoryInputsDiv.append(textareaElement);
+  memoryInputsDiv.append(inputElement);
+  memoryInputsDiv.append(uploadBtnDiv);
+  memoryInputsDiv.append(uploadedPictureHolderDiv);
 
-  memorySlotDiv.appendChild(formElement);
+  formElement.append(memoryNumberDiv);
+  formElement.append(memoryInputsDiv);
+  formElement.append(deleteBtnDiv);
 
-  timelineMemorySlotsT.appendChild(memorySlotDiv);
+  memorySlotDiv.append(formElement);
 
+  timelineMemorySlotsT.append(memorySlotDiv);
+
+  memoryNumberDiv.textContent = "1";
   timelineMemorySlotsT.scrollTop = timelineMemorySlotsT.scrollHeight;
   textareaElement.focus();
 
@@ -277,28 +317,38 @@ const addTimelineSlot = () => {
     updateMemorySlotCount();
   });
 
-  handleMemorySlotUpload({
+  formElement.addEventListener("submit", (e) => {
+    e.preventDefault();
+  });
+
+  if (memoryImageBlob) memoryImage.src = await getPicURL(memoryImageBlob);
+  if (memoryDescription) textareaElement.value = memoryDescription;
+
+  return {
     uploadBtn,
-    formElement,
     inputElement,
     uploadedPictureHolderDiv,
+  };
+};
+
+const addTimelineSlot = async ({ memoryDescription, memoryImageBlob } = "") => {
+  const memoryFormElements = await createTimelineMemoryForm({
+    memoryDescription,
+    memoryImageBlob,
   });
+
+  handleMemorySlotUpload(memoryFormElements);
 
   updateMemorySlotCount();
 };
 
 const handleMemorySlotUpload = ({
   uploadBtn,
-  formElement,
   inputElement: picUpload,
   uploadedPictureHolderDiv,
 }) => {
   uploadBtn.addEventListener("click", (e) => {
     picUpload.click();
-  });
-
-  formElement.addEventListener("submit", (e) => {
-    e.preventDefault();
   });
 
   picUpload.addEventListener("change", () => {
@@ -316,7 +366,7 @@ const handleMemorySlotUpload = ({
       image.src = imageURL;
 
       uploadedPictureHolderDiv.innerHTML = "";
-      uploadedPictureHolderDiv.appendChild(image);
+      uploadedPictureHolderDiv.append(image);
     };
   });
 };
@@ -341,7 +391,29 @@ const updateMemorySlotCount = () => {
   timelineMemoriesCountDivT.textContent = `Memories(${memorySlotCount}): `;
 };
 
-const publishTimeline = async () => {
+const timelineCreationPopUpMsg = (msg) => {
+  const timelineCreationPopUpMsgT = document.querySelector(
+    "#timeline-creation-pop-up-msg-t"
+  );
+  timelineCreationPopUpMsgT.style.display = "flex";
+  timelineCreationPopUpMsgT.style.backgroundColor = "black";
+  timelineCreationPopUpMsgT.textContent = msg;
+  setTimeout(() => {
+    timelineCreationPopUpMsgT.style.display = "none";
+  }, 1500);
+};
+
+const publishTimeline = async (viewCount) => {
+  const timelineMemorySlotsT = document.querySelector(
+    ".timeline-memory-slots-t"
+  );
+
+  if (timelineMemorySlotsT.childElementCount < 1) {
+    let msg = "Timeline needs at least 1 memory!";
+    timelineCreationPopUpMsg(msg);
+    return;
+  }
+
   try {
     const timelineCreationFormT = document.querySelector(
       "#timeline-creation-form-t"
@@ -357,11 +429,12 @@ const publishTimeline = async () => {
     const ownerID = localStorage.loggedUserID;
 
     timelineForm.append("timeline_owner_id", ownerID);
+    timelineForm.append("timeline_view_count", viewCount || 0);
     const formObject = Object.fromEntries(timelineForm);
 
     Object.assign(TIMELINE_CREATION_DATA, formObject);
 
-    const response = await fetch(`${URL}/timelines/post-timeline`, {
+    const postTimelineResponse = await fetch(`${URL}/timelines/post-timeline`, {
       method: "POST",
       body: JSON.stringify(formObject),
       headers: {
@@ -369,12 +442,12 @@ const publishTimeline = async () => {
       },
     });
 
-    if (!response.ok) {
+    if (!postTimelineResponse.ok) {
       confirmationPopUpMsg("Unable to publish timeline!");
       return;
     }
 
-    const timelineID = await response.json();
+    const timelineID = await postTimelineResponse.json();
     await updateTimelineMemories({
       timelineID,
       formElements: timelineMemoryFormT,
@@ -397,7 +470,10 @@ const publishTimeline = async () => {
         toAppend: false,
       });
 
-    confirmationPopUpMsg("Timeline published!");
+    if (typeof viewCount === "number")
+      confirmationPopUpMsg("Timeline updated!");
+    else confirmationPopUpMsg("Timeline published!");
+
     timelineCreationDialogT.close();
   } catch (err) {
     console.log(err);
@@ -422,6 +498,8 @@ const addPictureBlobToTimelineCreation = (pictureBlob) => {
 
 const updateTimelineMemories = async ({ timelineID, formElements }) => {
   TIMELINE_CREATION_DATA.timeline_owner_id = localStorage.loggedUserID;
+
+  console.log(formElements);
 
   return new Promise(async (res) => {
     for (let i = 0; i < formElements.length; i++) {
@@ -470,17 +548,15 @@ export const timelineCreationMemoriesSmoothScroll = () => {
   const timelineMemorySlotsT = document.querySelector(
     ".timeline-memory-slots-t"
   );
-  const timelineMemorySlotT = document.querySelectorAll(
-    ".timeline-memory-slot-t"
-  );
 
   let prevScrollPosition = timelineMemorySlotsT.scrollTop;
 
   timelineMemorySlotsT.addEventListener("scroll", () => {
-    let slotHeight = parseInt(
-      getComputedStyle(timelineMemorySlotT[0]).height,
-      10
+    const timelineMemorySlotT = document.querySelector(
+      ".timeline-memory-slot-t"
     );
+
+    let slotHeight = parseInt(getComputedStyle(timelineMemorySlotT).height, 10);
     let slotPadding = parseInt(
       getComputedStyle(timelineMemorySlotsT).paddingTop,
       10
@@ -509,9 +585,9 @@ export const timelineCreationMemoriesSmoothScroll = () => {
   });
 };
 
-const handleTimelineDeletion = (openedTimelineDialog) => {
-  const timelineDeleteTimelineT = document.querySelector(
-    "#timeline-delete-timeline-t"
+const handleTimelineDeletion = (timelineID) => {
+  const timelineDeleteTimelineBtnT = document.querySelector(
+    ".timeline-delete-timeline-btn-t"
   );
   const timelineAreYouSureHolderT = document.querySelector(
     "#timeline-are-you-sure-holder-t"
@@ -519,11 +595,30 @@ const handleTimelineDeletion = (openedTimelineDialog) => {
   const timelineDeletionDecisionBtnsT = document.querySelectorAll(
     ".timeline-deletion-decision-btns-t"
   );
+  const timelineOpenedDialogT = document.querySelector(
+    "#timeline-opened-dialog-t"
+  );
 
-  const handleDeletionDecision = (event) => {
+  console.log("timelineDeleteTimelineBtnT", timelineDeleteTimelineBtnT);
+
+  timelineDeleteTimelineBtnT.style.visibility = "visible";
+
+  const handleDeletionDecision = async (event) => {
+    console.log("ulazi");
     if (event.target.textContent === "Yes") {
-      openedTimelineDialog.close();
-      timelineDeleteTimelineT.removeEventListener("click", openDecisionWindow);
+      timelineOpenedDialogT.close();
+      const response = await deleteTimeline(timelineID);
+
+      if (response === 204) {
+        let msg = "Successfully deleted timeline";
+        confirmationPopUpMsg(msg);
+        console.log("Successfully deleted timeline: ", timelineID);
+      }
+
+      timelineDeleteTimelineBtnT.removeEventListener(
+        "click",
+        openDecisionWindow
+      );
     }
 
     timelineAreYouSureHolderT.style.display = "none";
@@ -534,14 +629,28 @@ const handleTimelineDeletion = (openedTimelineDialog) => {
   };
 
   const openDecisionWindow = () => {
-    timelineAreYouSureHolderT.style.display = "flex";
+    timelineAreYouSureHolderT.style.display = "flex !important";
 
     timelineDeletionDecisionBtnsT.forEach((decisionBtn) => {
       decisionBtn.addEventListener("click", handleDeletionDecision);
     });
   };
 
-  timelineDeleteTimelineT.addEventListener("click", openDecisionWindow);
+  timelineDeleteTimelineBtnT.addEventListener("click", openDecisionWindow);
+};
+
+const deleteTimeline = async (timelineID) => {
+  const deleteTimelineResponse = await fetch(
+    `${URL}/timelines/delete-timeline/${timelineID}`,
+    {
+      method: "DELETE",
+      // headers: {
+      //   "Content-Type": "application/json",
+      // },
+    }
+  );
+
+  return deleteTimelineResponse.status;
 };
 
 const handleTimelineOpening = async ({
@@ -551,8 +660,9 @@ const handleTimelineOpening = async ({
   timelineBackgroundColor,
   timelineFontFamily,
   timelineFontColor,
+  timelineIsPublic,
 }) => {
-  console.log(timelineBackgroundColor, timelineFontFamily, timelineFontColor);
+  console.log("opened timeline id", timelineID);
   const timelineOpenedDialogT = document.querySelector(
     "#timeline-opened-dialog-t"
   );
@@ -572,11 +682,11 @@ const handleTimelineOpening = async ({
   const timelineMemoryPictureZoomedT = document.querySelector(
     "#timeline-memory-picture-zoomed-t"
   );
-  const timelineDeleteTimelineT = document.querySelector(
-    "#timeline-delete-timeline-t"
-  );
   const timelineTimelineSideT = document.querySelectorAll(
     ".timeline-timeline-side-t"
+  );
+  const timelineOpenedSettingsT = document.querySelector(
+    ".timeline-opened-settings-t"
   );
 
   toggleLoadingAnimation();
@@ -607,11 +717,94 @@ const handleTimelineOpening = async ({
     }
   });
 
+  const handleTimelineSettings = () => {
+    const timelineCreationDialogT = document.querySelector(
+      "#timeline-creation-dialog-t"
+    );
+    const timelineCreationTitleT = document.querySelector(
+      "#timeline-creation-title-t"
+    );
+    const timelineTitleInputT = document.querySelector(
+      "#timeline-title-input-t"
+    );
+    const timelineSettingsInputsT = document.querySelectorAll(
+      ".timeline-settings-input-t"
+    );
+
+    timelineOpenedSettingsT.addEventListener("click", async (e) => {
+      const timelineMemorySlotsT = document.querySelector(
+        ".timeline-memory-slots-t"
+      );
+
+      timelineCreationDialogT.showModal();
+      document.body.style.overflow = "hidden";
+
+      timelineMemorySlotsT.innerHTML = "";
+      timelineCreationTitleT.textContent = "TIMELINE SETTINGS";
+      timelineTitleInputT.value = timelineTitle;
+
+      timelineSettingsInputsT.forEach((settingInput) => {
+        if (settingInput.id === "timeline-font-family-input-t")
+          settingInput.value = timelineFontFamily;
+        else if (settingInput.id === "timeline-font-color-input-t")
+          settingInput.value = timelineFontColor;
+        else if (settingInput.id === "timeline-background-color-input-t")
+          settingInput.value = timelineBackgroundColor;
+        else if (settingInput.id === "timeline-is-public-input-t")
+          settingInput.checked = timelineIsPublic ? 1 : 0;
+      });
+
+      memories.forEach((memory) => {
+        addTimelineSlot({
+          memoryDescription: memory.memory_description,
+          memoryImageBlob: memory.picture_data.data,
+        });
+      });
+
+      const timelinePublishBtnT = document.querySelector(
+        "#timeline-publish-btn-t"
+      );
+      timelinePublishBtnT.textContent = "UPDATE TIMELINE";
+      timelinePublishBtnT.id = "timeline-publish-btn-t";
+
+      const timelineViewCountResponse = await fetch(
+        `${URL}/timelines/get-timeline-view-count?timeline_id=${timelineID}`
+      );
+
+      if (!timelineViewCountResponse.ok) return;
+
+      const timelineViewCount = await timelineViewCountResponse.json();
+      const timelineOpenedDialogT = document.querySelector(
+        "#timeline-opened-dialog-t"
+      );
+
+      const timelinePublishDivT = document.querySelector(
+        "#timeline-publish-div-t"
+      );
+      const timelineUpdateBtnT = document.querySelector("button");
+
+      timelinePublishDivT.innerHTML = "";
+      timelineUpdateBtnT.textContent = "UPDATE TIMELINE";
+      timelineUpdateBtnT.id = "timeline-publish-btn-t";
+      timelinePublishDivT.append(timelineUpdateBtnT);
+
+      timelineUpdateBtnT.addEventListener("click", async () => {
+        console.log("ulazi");
+        await publishTimeline(timelineViewCount);
+        await deleteTimeline(timelineID);
+
+        timelineOpenedDialogT.close();
+        timelineCreationDialogT.close();
+      });
+    });
+  };
+
   if (Number(timelineOwnerID) === Number(localStorage.loggedUserID)) {
-    timelineDeleteTimelineT.style.visibility = "visible";
-    handleTimelineDeletion(timelineOpenedDialogT);
+    timelineOpenedSettingsT.style.visibility = "visible";
+    handleTimelineSettings();
+    handleTimelineDeletion(timelineID);
   } else {
-    timelineDeleteTimelineT.style.visibility = "hidden";
+    timelineOpenedSettingsT.style.visibility = "hidden";
     await postTimelineVisit({
       visitedTimelineID: timelineID,
       vistorUserID: localStorage.loggedUserID,
@@ -688,7 +881,7 @@ const handleTimelineOpening = async ({
         }
 
         timelineMemorySlotT.style.right = `${
-          slotWidth * (memories.length - index - slotOffset)
+          slotWidth * (index + slotOffset)
         }px`;
       })();
 
