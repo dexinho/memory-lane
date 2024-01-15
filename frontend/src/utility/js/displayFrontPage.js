@@ -11,7 +11,7 @@ import { getPicURL } from "./getPicURL.js";
 import { URL, urlNavigation } from "./URL.js";
 import { handleUserSearch } from "./findUser.js";
 import {
-  createNewTimeline as handleTimelineCreation,
+  handleTimelineCreation,
   displayTimelines,
   makeTimelineSideBtnsFunctional,
 } from "./timelines.js";
@@ -96,29 +96,15 @@ export const displayCurrentPageLogoAndName = async ({ picture, name }) => {
   filterTextT.id = "filter-text-t";
   filterDropdownT.id = "filter-dropdown-t";
   fiterBrT.id = "filter-br-t";
-  // const sortTimelinesSelectT = document.createElement("select");
-
-  // const sortBy = document.createElement("option");
-  // const sortByViewsAsc = document.createElement("option");
-  // const sortByViewsDes = document.createElement("option");
-  // const sortByold = document.createElement("option");
-  // const sortByNew = document.createElement("option");
 
   timelineSlotsT.id = "timeline-slots-t";
   sortCreatedTimelinesDivT.id = "sort-created-timelines-div-t";
-  // sortTimelinesSelectT.id = "sort-timelines-select-t";
 
   currentTimelineHolderT.id = "current-timeline-holder-t";
   currentTimelinePicT.id = "current-timeline-pic-t";
   currentTimelineName.id = "current-timeline-name-t";
 
   currentTimelinePicT.className = "round-pic-b";
-
-  // sortBy.textContent = "SORT BY";
-  // sortByViewsAsc.textContent = "Highest views";
-  // sortByViewsDes.textContent = "Lowest views";
-  // sortByold.textContent = "Oldest timelines";
-  // sortByNew.textContent = "Newest timelines";
 
   currentTimelinePicT.src = picture
     ? picture
@@ -140,11 +126,6 @@ export const displayCurrentPageLogoAndName = async ({ picture, name }) => {
   filterDropdownT.append(filterOptionUpdatedOld);
   filterDropdownT.append(filterOptionViewsLow);
 
-  // sortByViewsAsc.value = "highest-views";
-  // sortByViewsDes.value = "lowest-views";
-  // sortByold.value = "old-timelines";
-  // sortByNew.value = "new-timelines";
-
   timelinesDivT.append(sortCreatedTimelinesDivT);
   timelinesDivT.append(timelineSlotsT);
 
@@ -155,13 +136,6 @@ export const displayCurrentPageLogoAndName = async ({ picture, name }) => {
   filterTextIconT.append(filterTextT);
   filterTextIconT.append(filterIconT);
   filterHolderT.append(filterDropdownT);
-  // sortCreatedTimelinesDivT.append(sortTimelinesSelectT);
-
-  // sortTimelinesSelectT.append(sortBy);
-  // sortTimelinesSelectT.append(sortByViewsAsc);
-  // sortTimelinesSelectT.append(sortByViewsDes);
-  // sortTimelinesSelectT.append(sortByNew);
-  // sortTimelinesSelectT.append(sortByold);
 
   currentTimelineHolderT.append(currentTimelinePicT);
   currentTimelineHolderT.append(currentTimelineName);
