@@ -60,11 +60,12 @@ const postTimeline = async ({
   timeline_font_color,
   timeline_font_family,
   timeline_is_public,
+  timeline_view_count,
 }) => {
   try {
     const [result] = await connection.execute(
-      `INSERT INTO timelines(timeline_owner_id, timeline_title, timeline_background_color, timeline_font_color, timeline_font_family, timeline_is_public, timeline_picture_id, timeline_date_created, timeline_date_updated) 
-      values (?, ?, ?, ?, ?, ?, ?, CURRENT_DATE(), CURRENT_DATE())`,
+      `INSERT INTO timelines(timeline_owner_id, timeline_title, timeline_background_color, timeline_font_color, timeline_font_family, timeline_is_public, timeline_picture_id, timeline_date_created, timeline_date_updated, timeline_view_count) 
+      values (?, ?, ?, ?, ?, ?, ?, CURRENT_DATE(), CURRENT_DATE(), ?)`,
       [
         timeline_owner_id,
         timeline_title,
@@ -73,8 +74,11 @@ const postTimeline = async ({
         timeline_font_family,
         timeline_is_public === "on",
         1,
+        timeline_view_count,
       ]
     );
+
+    console.log('timeline_view_count', timeline_view_count)
 
     return result.insertId;
   } catch (err) {
@@ -126,7 +130,7 @@ const getMemories = async (timeline_id) => {
 
 const postTimelineVisit = async ({ visited_timeline_id, visitor_user_id }) => {
   try {
-    console.log(visited_timeline_id, visitor_user_id)
+    console.log(visited_timeline_id, visitor_user_id);
     await connection.execute(
       `INSERT INTO timeline_visits (timeline_visit_timeline_id, timeline_visit_user_id)
       VALUES (?, ?)`,
@@ -141,10 +145,44 @@ const postTimelineVisit = async ({ visited_timeline_id, visitor_user_id }) => {
   }
 };
 
+const deleteTimeline = async (timelineID) => {
+  try {
+    const [rows] = await connection.execute(
+      `DELETE FROM timelines WHERE
+   timeline_id = ?`,
+      [timelineID]
+    );
+
+    console.log(`${rows.affectedRows} row(s) deleted`);
+
+    return "00000";
+  } catch (err) {
+    console.log("Error deleting row:", err.message);
+    return "23000";
+  }
+};
+
+const getTimelineViewCount = async (timelineID) => {
+  try {
+    const [viewCount] = await connection.execute(
+      `SELECT timeline_view_count FROM timelines
+where timeline_id = ?`,
+      [timelineID]
+    );
+
+    return viewCount
+  } catch (err) {
+    console.log("Error getting view count:", err.message);
+    return "23000";
+  }
+};
+
 timelinesModel.getTimelines = getTimelines;
 timelinesModel.postTimeline = postTimeline;
 timelinesModel.postMemory = postMemory;
 timelinesModel.getMemories = getMemories;
 timelinesModel.postTimelineVisit = postTimelineVisit;
+timelinesModel.getTimelineViewCount = getTimelineViewCount;
+timelinesModel.deleteTimeline = deleteTimeline;
 
 module.exports = timelinesModel;
