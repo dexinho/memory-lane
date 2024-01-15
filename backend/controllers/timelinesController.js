@@ -67,14 +67,14 @@ const postTimelineVisit = async (req, res) => {
   try {
     const { visited_timeline_id, visitor_user_id } = req.body;
 
-    console.log(visited_timeline_id, visitor_user_id)
+    console.log(visited_timeline_id, visitor_user_id);
 
     await timelinesModel.postTimelineVisit({
       visited_timeline_id,
       visitor_user_id,
     });
 
-    console.log('Increasaed view count for timeline: ', visited_timeline_id)
+    console.log("Increasaed view count for timeline: ", visited_timeline_id);
 
     res.sendStatus(200);
   } catch (err) {
@@ -84,10 +84,39 @@ const postTimelineVisit = async (req, res) => {
   }
 };
 
+const deleteTimeline = async (req, res) => {
+  try {
+    const timelineID = req.params.timeline_id;
+
+    const sqlState = await timelinesModel.deleteTimeline(timelineID);
+
+    if (sqlState === "00000") res.sendStatus(204);
+  } catch (err) {
+    console.log(err);
+    if (sqlState === "23000") res.sendStatus(404);
+    else res.sendStatus(500);
+  }
+};
+
+const getTimelineViewCount = async (req, res) => {
+  try {
+    const { timeline_id } = req.query;
+
+    const viewCount = await timelinesModel.getTimelineViewCount(timeline_id);
+
+    res.status(200).json(viewCount[0].timeline_view_count);
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+};
+
 timelinesController.getTimelines = getTimelines;
 timelinesController.postTimeline = postTimeline;
 timelinesController.postMemory = postMemory;
 timelinesController.getMemories = getMemories;
 timelinesController.postTimelineVisit = postTimelineVisit;
+timelinesController.deleteTimeline = deleteTimeline;
+timelinesController.getTimelineViewCount = getTimelineViewCount;
 
 module.exports = timelinesController;
