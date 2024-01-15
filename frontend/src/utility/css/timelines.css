@@ -451,6 +451,15 @@ select:hover {
   border-radius: 100%;
 }
 
+.timeline-delete-timeline-btn-t {
+  font-size: 1.4rem;
+}
+
+.timeline-delete-timeline-btn-t:hover {
+  color: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
 #timeline-creation-dialog-t>div {
   display: flex;
   align-items: center;
@@ -629,7 +638,7 @@ select:hover {
   height: 50px;
   position: sticky;
   bottom: 0;
-  padding: 0.5rem;
+  padding: 1rem;
   background-color: white;
   display: flex;
   align-items: center;
@@ -651,7 +660,7 @@ select:hover {
 }
 
 #timeline-publish-btn-t {
-  width: 300px;
+  width: 100%;
   height: 50px;
   background-color: var(--primary-color);
   font-size: 1.2rem;
@@ -996,11 +1005,11 @@ select:hover {
   border-radius: 1rem;
 }
 
-.timeline-delete-timeline-t {
+.timeline-opened-settings-t {
   font-size: 1.6rem;
 }
 
-.timeline-delete-timeline-t:hover {
+.timeline-opened-settings-t:hover {
   cursor: pointer;
   color: rgba(0, 0, 0, 0.5);
 }
@@ -1013,7 +1022,7 @@ select:hover {
   padding: 1rem;
   z-index: 10000;
   background-color: rgb(41, 38, 38);
-  display: none;
+  display: none !important;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
@@ -1041,6 +1050,21 @@ select:hover {
 .timeline-deletion-decision-btns-t:hover {
   background-color: rgba(0, 0, 0, 0.2);
   color: whitesmoke;
+}
+
+#timeline-creation-pop-up-msg-t {
+  display: none;
+  position: absolute;
+  padding: 2rem;
+  color: purple;
+  font-size: 2rem;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 1rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 #loading-circle {
