@@ -33,17 +33,9 @@
     <dialog id="confirmation-pop-up-t">
     </dialog>
     <dialog id="timeline-opened-dialog-t">
-      <div id="timeline-are-you-sure-holder-t">
-        <div>You are about to delete this timeline. Are you sure?</div>
-        <div>
-          <button class="timeline-deletion-decision-btns-t">Yes</button>
-          <button class="timeline-deletion-decision-btns-t">No</button>
-        </div>
-
-      </div>
       <div id="timeline-opened-holder-t">
         <div id="timeline-header-t">
-          <div id="timeline-delete-timeline-t"><i class="fa-solid fa-trash timeline-delete-timeline-t"></i></div>
+          <div id="timeline-opened-settings-holder-t"><i class="fa-solid fa-gear timeline-opened-settings-t"></i></div>
           <div id="timeline-memories-pic-title-t">
             <img id='timeline-memories-owner-pic-t'>
             <div id="timeline-memories-title-t"></div>
@@ -72,18 +64,34 @@
       </div>
     </dialog>
     <dialog id="timeline-creation-dialog-t">
-      <div>
+      <div id="timeline-are-you-sure-holder-t">
+        <div>You are about to delete this timeline. Are you sure?</div>
+        <div>
+          <button class="timeline-deletion-decision-btns-t"></button>
+          <button class="timeline-deletion-decision-btns-t">No</button>
+          <button class="timeline-deletion-decision-btns-t">Yes</button>
+        </div>
+
+      </div>
+      <div id="timeline-creation-pop-up-msg-t">
+
+      </div>
+      <div id="timeline-creation-container-t">
         <div id="timeline-creation-header-t">
-          <div class="width-50"></div>
+          <div id="timeline-delete-timeline-t">
+            <i class="fa-solid fa-trash timeline-delete-timeline-btn-t"></i>
+          </div>
           <div id="timeline-creation-title-t">TIMELINE CREATION</div>
-          <button id="close-timeline-creation-btn-t"><i class="fa-solid fa-xmark"></i></button>
+          <div>
+            <button id="close-timeline-creation-btn-t"><i class="fa-solid fa-xmark"></i></button>
+          </div>
         </div>
         <div id="timeline-creation-holder-t">
           <div id="timeline-creation-form-holder-t">
             <form action="POST" id="timeline-creation-form-t">
               <div id="timeline-title-t">
                 <label for="timeline-title-input-t">Title: </label>
-                <input type="text" id="timeline-title-input-t" name="timeline_title">
+                <input type="text" id="timeline-title-input-t" name="timeline_title" placeholder="School">
               </div>
               <div id="timeline-creation-settings-title-t">Settings</div>
               <div id="timeline-creation-settings-t">
@@ -104,7 +112,8 @@
                 </div>
                 <div id="timeline-is-public-div-t">
                   <label for="timeline-is-public-input-t">Public: </label>
-                  <input type="checkbox" id="timeline-is-public-input-t" name="timeline_is_public" checked>
+                  <input type="checkbox" class="timeline-settings-input-t" id="timeline-is-public-input-t"
+                    name="timeline_is_public" checked>
                 </div>
               </div>
             </form>
@@ -113,8 +122,8 @@
             <div id="timeline-memories-count-div-t">Memories(1)</div>
           </div>
           <div class="timeline-memory-slots-t">
-            <div class="timeline-memory-slot-t">
-              <form action="POST" class="timeline-memory-form-t">
+            <!-- <div class="timeline-memory-slot-t"> -->
+            <!-- <form action="POST" class="timeline-memory-form-t">
                 <div class="timeline-memory-number-t">1</div>
                 <div class="timeline-memory-inputs-t">
                   <textarea name="memory_description_textarea_t" class="memory-description-textarea-t" cols="30"
@@ -125,9 +134,8 @@
                   <div class="uploaded-memory-picture-holder-t">
                   </div>
                 </div>
-                <div></div>
-              </form>
-            </div>
+              </form> -->
+            <!-- </div> -->
           </div>
 
           <div id="timeline-new-memory-div-t">
