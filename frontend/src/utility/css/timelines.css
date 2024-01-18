@@ -446,31 +446,25 @@ select:hover {
 }
 
 #close-timeline-creation-btn-t {
-  width: 50px;
-  height: 50px;
-  border-radius: 100%;
+  scale: 2;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
 }
 
 .timeline-delete-timeline-btn-t {
   font-size: 1.4rem;
+  display: flex;
+  justify-content: center;
 }
 
-.timeline-delete-timeline-btn-t:hover {
+.timeline-delete-timeline-btn-t:hover, #close-timeline-creation-btn-t:hover {
   color: rgba(0, 0, 0, 0.5);
   cursor: pointer;
 }
 
-#timeline-creation-dialog-t>div {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
 #timeline-creation-header-t {
   display: flex;
-  align-items: center;
   justify-content: space-between;
   width: 100%;
 }
@@ -1005,11 +999,11 @@ select:hover {
   border-radius: 1rem;
 }
 
-.timeline-opened-settings-t {
+.timeline-open-settings-t {
   font-size: 1.6rem;
 }
 
-.timeline-opened-settings-t:hover {
+.timeline-open-settings-t:hover {
   cursor: pointer;
   color: rgba(0, 0, 0, 0.5);
 }
@@ -1020,9 +1014,8 @@ select:hover {
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 1rem;
-  z-index: 10000;
   background-color: rgb(41, 38, 38);
-  display: none !important;
+  display: none;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
