@@ -10,8 +10,6 @@ import { URL } from "./URL.js";
 submitRegisterBtn.addEventListener("click", (e) => {
   e.preventDefault();
 
-  console.log(submitRegisterBtn)
-
   if (passwordInputR.value === confirmPasswordInputR.value)
     handleUserRegistration();
   else displayPopUpMsg("Passwords must match!");
