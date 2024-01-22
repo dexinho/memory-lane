@@ -613,46 +613,46 @@ const uploadPicture = async (pictureBlob) => {
   return await pictureUploadResponse.json();
 };
 
-export const timelineCreationMemoriesSmoothScroll = () => {
-  const timelineMemorySlotsT = document.querySelector(
-    ".timeline-memory-slots-t"
-  );
+// export const timelineCreationMemoriesSmoothScroll = () => {
+//   const timelineMemorySlotsT = document.querySelector(
+//     ".timeline-memory-slots-t"
+//   );
 
-  let prevScrollPosition = timelineMemorySlotsT.scrollTop;
+//   let prevScrollPosition = timelineMemorySlotsT.scrollTop;
 
-  timelineMemorySlotsT.addEventListener("scroll", () => {
-    const timelineMemorySlotT = document.querySelector(
-      ".timeline-memory-slot-t"
-    );
+//   timelineMemorySlotsT.addEventListener("scroll", () => {
+//     const timelineMemorySlotT = document.querySelector(
+//       ".timeline-memory-slot-t"
+//     );
 
-    let slotHeight = parseInt(getComputedStyle(timelineMemorySlotT).height, 10);
-    let slotPadding = parseInt(
-      getComputedStyle(timelineMemorySlotsT).paddingTop,
-      10
-    );
+//     let slotHeight = parseInt(getComputedStyle(timelineMemorySlotT).height, 10);
+//     let slotPadding = parseInt(
+//       getComputedStyle(timelineMemorySlotsT).paddingTop,
+//       10
+//     );
 
-    let scrollOffset = slotHeight + slotPadding;
-    let currentScrollPosition = timelineMemorySlotsT.scrollTop;
+//     let scrollOffset = slotHeight + slotPadding;
+//     let currentScrollPosition = timelineMemorySlotsT.scrollTop;
 
-    if (currentScrollPosition > prevScrollPosition) {
-      const nextSnapPosition =
-        Math.ceil(currentScrollPosition / scrollOffset) * scrollOffset;
-      timelineMemorySlotsT.scrollTo({
-        top: nextSnapPosition,
-        behavior: "smooth",
-      });
-    } else {
-      const prevSnapPosition =
-        Math.floor(currentScrollPosition / scrollOffset) * scrollOffset;
-      timelineMemorySlotsT.scrollTo({
-        top: prevSnapPosition,
-        behavior: "smooth",
-      });
-    }
+//     if (currentScrollPosition > prevScrollPosition) {
+//       const nextSnapPosition =
+//         Math.ceil(currentScrollPosition / scrollOffset) * scrollOffset;
+//       timelineMemorySlotsT.scrollTo({
+//         top: nextSnapPosition,
+//         behavior: "smooth",
+//       });
+//     } else {
+//       const prevSnapPosition =
+//         Math.floor(currentScrollPosition / scrollOffset) * scrollOffset;
+//       timelineMemorySlotsT.scrollTo({
+//         top: prevSnapPosition,
+//         behavior: "smooth",
+//       });
+//     }
 
-    prevScrollPosition = currentScrollPosition;
-  });
-};
+//     prevScrollPosition = currentScrollPosition;
+//   });
+// };
 
 const handleTimelineDeletion = async (timelineID) => {
   const timelineDeleteTimelineBtnT = document.querySelector(
