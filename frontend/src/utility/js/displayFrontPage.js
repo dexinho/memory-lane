@@ -16,7 +16,7 @@ import {
   makeTimelineSideBtnsFunctional,
 } from "./timelines.js";
 import {
-  timelineCreationMemoriesSmoothScroll,
+  // timelineCreationMemoriesSmoothScroll,
   timelineSlotsT,
 } from "./timelines.js";
 import { toggleLoadingAnimation } from "./loadingAnimation.js";
@@ -332,5 +332,5 @@ handleUserSearch();
 handleTimelineCreation();
 handleUserScroll();
 handleHomePageBtn();
-timelineCreationMemoriesSmoothScroll();
 makeTimelineSideBtnsFunctional();
+// timelineCreationMemoriesSmoothScroll();
