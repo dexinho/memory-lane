@@ -37,7 +37,6 @@ if (submitLoginBtn) {
 }
 
 const displayPopUpMsg = (msg) => {
-  console.log(loginPopUpMsgT)
   loginPopUpMsgT.style.display = "block";
   loginPopUpMsgT.textContent = msg;
 
