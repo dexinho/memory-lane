@@ -10,8 +10,6 @@ if (submitLoginBtn) {
     e.preventDefault();
     const formEntries = new FormData(loginForm);
 
-    console.log(JSON.stringify(Object.fromEntries(formEntries)));
-
     try {
       const response = await fetch(`${URL}/authentication/validate`, {
         method: "POST",
@@ -29,18 +27,20 @@ if (submitLoginBtn) {
 
         const url = "./src/utility/html/timelines.html";
         urlNavigation(url);
-      } else if (response.status === 400)
+      } else if (response.status === 400) {
         displayPopUpMsg("Incorrect Email or Password!");
-      else displayPopUpMsg("Server error");
+      } else displayPopUpMsg("Server error");
     } catch (err) {
-      console.log(err);
+      console.log(err.message);
     }
   });
 }
 
 const displayPopUpMsg = (msg) => {
+  console.log(loginPopUpMsgT)
   loginPopUpMsgT.style.display = "block";
   loginPopUpMsgT.textContent = msg;
+
 
   setTimeout(() => {
     loginPopUpMsgT.style.display = "none";
